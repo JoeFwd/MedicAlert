@@ -5,10 +5,10 @@ exports.medicamentsTable = medicamentsTable;
 
 const createTableMedicaments = 
 	'CREATE TABLE IF NOT EXISTS ' + medicamentsTable + '('
-	+ 'cip13 INT PRIMARY KEY,'
-	+ ' cis VARCHAR(7) NOT NULL,'
+	+ 'cip7 INT PRIMARY KEY,'
+	+ ' cis VARCHAR(8) NOT NULL,'
 	+ ' nom VARCHAR(100) NOT NULL,'
-	+ ' date_peremption DATE NOT NULL,'
+	+ ' date_peremption DATETIME NOT NULL,'
 	+ ' quantite INT'
 	+ ')';
 
