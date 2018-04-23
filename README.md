@@ -7,7 +7,7 @@ bdpm-tools :
 - npm install
 - node index.js
 
-mysql :
-- npm install mysql --save
-- npm install express --save
+rest_api :
+- npm install
 - node server.js
+- Pour lancer les tests : npm test 
