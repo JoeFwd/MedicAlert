@@ -24,15 +24,6 @@ exports.createAllTables = function (){
 			console.error(err);
 			return;
 		}
-		notifyCreatedTable(result, medicamentsTable);
+		//notifyCreatedTable(result, medicamentsTable);
 	});
 }
-/*UPDATE Medicaments
-SET cis='6721345'
-WHERE id = 2; 
-
-UPDATE Medicaments
-SET cis='7721345'
-WHERE id = 1; */
-
-

@@ -15,14 +15,9 @@ app.use(bodyParser.urlencoded({
 
 tables.createAllTables();
 
-app.get('/', function(req, res) {
-  res.send('Our first route is working.:)');
-});
-
 /*Requête pour la table Médicaments*/
-
-function hasOnlyNumbers(cip7){
-	return (cip7.match(/^[0-9]+$/))?true:false;
+function hasOnlyNumbers(str){
+	return (str.match(/^[0-9]+$/))?true:false;
 }
 
 function isEmptyObject(obj){
@@ -34,6 +29,9 @@ function isEmptyObject(obj){
 	return true;
 }
 
+const datePeremptionYYYYMMDD = 'convert(varchar, ?, 23)';
+const genericSelectMedicaments = 'SELECT cip7, cis, nom, DATE_FORMAT(date_peremption, "%Y-%m-%d") AS date_peremption, quantite FROM ' + tables.medicamentsTable;
+
 /*sql: requête; data: tableau contenant les données correspondant aux paramètres de la requête HTTP.
 req, res, next sont les arguments qui doivent donnés au handler de la fonction de routage (express.Router().*).*/
 function middlewareHandler(sql, data, req, res, next){
@@ -42,7 +40,7 @@ function middlewareHandler(sql, data, req, res, next){
 			console.error(err);
 			res.statusCode = 500;
 			return res.json({
-				errors: ['Le médicament ne peut être récupérer']
+				errors: ['Le médicament ne peut être récupéré']
 			});
 		}
 		if(result.length === 0){
@@ -57,7 +55,7 @@ function middlewareHandler(sql, data, req, res, next){
 }
 
 function findMedicamentByCip7(req, res, next){
-	var sql = 'SELECT * FROM ' + tables.medicamentsTable + ' WHERE cip7 = ?;';
+	var sql = genericSelectMedicaments + ' WHERE cip7 = ?;';
 	var data = [req.params.cip7];
 	if(!hasOnlyNumbers(req.params.cip7)){
 		res.statusCode = 400;
@@ -69,7 +67,7 @@ function findMedicamentByCip7(req, res, next){
 }
 
 function findMedicamentByCis(req, res, next){
-	var sql = 'SELECT * FROM ' + tables.medicamentsTable + ' WHERE cis = ?;';
+	var sql = genericSelectMedicaments + ' WHERE cis = ?;';
 	var data = [req.params.cis];
 	if(!hasOnlyNumbers(req.params.cis)){
 		res.statusCode = 400;
@@ -81,7 +79,7 @@ function findMedicamentByCis(req, res, next){
 }
 
 function findMedicamentContainingNom(req, res, next){
-	var sql = 'SELECT * FROM ' + tables.medicamentsTable + ' WHERE nom LIKE ?';
+	var sql = genericSelectMedicaments + ' WHERE nom LIKE ?';
 	var containsNom = '%' + req.params.nom + '%';
 	var data = [containsNom];
 		sql+=' ORDER BY nom';
@@ -102,8 +100,6 @@ function findMedicamentContainingNom(req, res, next){
 		sql+=' LIMIT ' + connection.escape(limit);
 	}
 	sql+=";"
-	console.log(data);
-	console.log('sql: ' + sql);
 	middlewareHandler(sql, data, req, res, next);	
 }
 
@@ -123,16 +119,15 @@ function checkPatchReqValidity(req, res, next){
 		});	
 	}
 	
-	var sql = 'SELECT * FROM ' + tables.medicamentsTable + ' WHERE cip7 = ?;';
+	var sql = genericSelectMedicaments + ' WHERE cip7 = ?;';
 	var data = [req.params.cip7];	
 	middlewareHandler(sql, data, req, res, next);
 }
 
 var medicamentRouter = express.Router();
 medicamentRouter.get('/cip7/:cip7', findMedicamentByCip7, function(req, res) {
-	console.log(req.body);
 	res.statusCode = 200;
-	res.json(req.medicament);
+	res.json(req.medicament[0]); //A tester array(1) sans [0]
 });
 medicamentRouter.get('/cis/:cis', findMedicamentByCis, function(req, res) {
 	res.statusCode = 200;
@@ -148,7 +143,7 @@ medicamentRouter.post('/', function(req, res) {
 		req.body.cip7,
 		req.body.cis,
 		req.body.nom,
-		req.body.date_peremption,
+		req.body.date_peremption, /*Format : YYYY-MM-DD*/
 		req.body.quantite 
 	];
 	var cip7 = req.body.cip7;
@@ -161,7 +156,7 @@ medicamentRouter.post('/', function(req, res) {
 				errors: ['La création du médicament a échouée'] 
 			});
 		}
-		var sql = 'SELECT * FROM ' + tables.medicamentsTable + ' WHERE cip7 = ?;';
+		var sql = genericSelectMedicaments + ' WHERE cip7 = ?;';
 		connection.query(sql, [cip7], function(err, result){
 			if(err){
 				console.error(err);
@@ -171,7 +166,7 @@ medicamentRouter.post('/', function(req, res) {
 				});
 			}
 			res.statusCode = 201;
-			res.json(result);
+			res.json(result[0]);
 		});
 	});
 });
@@ -191,7 +186,6 @@ medicamentRouter.patch('/:cip7', checkPatchReqValidity, function(req, res) {
 	}
 	sql = sql.substring(0, sql.length - 1);
 	sql += ' WHERE cip7 = ' + connection.escape(Number(req.params.cip7)) + ';';
-	console.log(sql);
 	
 	/*requête de modification executée*/
 	connection.query(sql, data, function(err, result){
@@ -202,7 +196,7 @@ medicamentRouter.patch('/:cip7', checkPatchReqValidity, function(req, res) {
 				errors: ['Le médicament n\'a pas pu être modifié']
 			});
 		}
-		var sql = 'SELECT * FROM ' + tables.medicamentsTable + ' WHERE cip7 = ?;';
+		var sql = genericSelectMedicaments + ' WHERE cip7 = ?;';
 		connection.query(sql, [req.params.cip7], function(err, result){
 			if(err){
 				console.error(err);
@@ -212,7 +206,7 @@ medicamentRouter.patch('/:cip7', checkPatchReqValidity, function(req, res) {
 				});
 			}
 			res.statusCode = 201;
-			res.json(result);
+			res.json(result[0]);
 		});
 	});
 });
@@ -236,6 +230,8 @@ medicamentRouter.delete('/:cip7', findMedicamentByCip7, function(req, res) {
 });
 app.use('/medicaments', medicamentRouter);
 
-app.listen(port, function() {
+var server = app.listen(port, function() {
 	console.log('Listening on port ' + port);
 });
+
+module.exports = server;
