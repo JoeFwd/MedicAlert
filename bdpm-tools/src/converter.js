@@ -1,14 +1,10 @@
 const iconv = require('iconv-lite');
 const moment = require('moment')
-const path = require('path');
 
 const readline = require('readline');
 const fs = require('fs');
 const { promisify } = require('util');
 const writeFile = promisify(fs.writeFile);
-const medicQ = require('./medicationQuantity');
-
-
 
 function parseLine(line) {
 	return line.trim().replace(/\u0092/g, '\'').split('\t');
@@ -16,7 +12,6 @@ function parseLine(line) {
 
 function createRowObject(headers, values) {
 	const rowObject = {};
-	
 	headers.forEach((header, index) => {
 		if (typeof header === 'string')
 			rowObject[header] = values[index] || '';
@@ -71,21 +66,9 @@ function createRowObject(headers, values) {
 	return rowObject;
 }
 
-function contains(a, obj) {
-    var i = a.length;
-    while (i--) {
-       if (a[i] === obj) {
-           return true;
-       }
-    }
-    return false;
-}
-var unique_libelles = [];
-module.exports = async function (file_name_folder, file_name, headers, getRequest) {
+module.exports = async function (file_name, headers) {
 	return new Promise((res, rej) => {
-
-		const data = ['BEGIN TRANSACTION;'];
-		const json = [];
+		const json = {};
 		const lineReader = readline.createInterface({
 			input: fs.createReadStream(file_name).pipe(iconv.decodeStream('binary'))
 		});
@@ -93,36 +76,18 @@ module.exports = async function (file_name_folder, file_name, headers, getReques
 		lineReader.on('line', function (line) {
 			if(headers.length <= line.split('\t').length){ /*Gestion des erreurs de formatage du texte brut*/
 				const doc = createRowObject(headers, parseLine(line));
-				
-				if(file_name.localeCompare(path.join(file_name_folder, 'CIS_CIP_bdpm.txt')) == 0){
-					var libelle = doc['libelle']; 
-					if(!contains(unique_libelles, libelle)){
-						unique_libelles.push(libelle + "\n");
-						var quantity = medicQ.getQuantityOfLibelle(libelle);
-						/*if(quantity != -1){
-							console.log(quantity);
-						}
-						else
-							console.log('Couldn\'t retrieve a quantity for medication '
-							 + doc['cip13'] + ' :\n' + doc['libelle']);*/
-					}
-				}
-				data.push(getRequest(doc));
-				json.push(doc);
+				if(!(doc.cis in json))
+					json[doc.cis]=doc;
 			}
 		});
 
 		lineReader.on('close', async () => {
 			try {
-				data.push('COMMIT;')
-				const sql = data.filter(d => !!d).join('\n');
-				await Promise.all([
-					writeFile(file_name + '.json', JSON.stringify(json, null, 2)),
-					writeFile(file_name + '.sql', sql),
-					//writeFile(file_name + "_libelle" + '.txt', unique_libelles)
-				]);
-				res(sql)
-
+				//var json_file = JSON.stringify(json, null, 2);
+				/*await Promise.all([
+					writeFile(file_name + '.txt', json)
+				]);*/
+				res(json);
 			} catch (e) {
 				rej(e);
 			}
