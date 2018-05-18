@@ -1,4 +1,4 @@
-const converter = require('./src/converter');
+const converter = require('./converter');
 const path = require('path');
 const download = require('download');
 
@@ -116,6 +116,7 @@ const formePharmas = [
 	"suspension",
 	"vernis",
 ];
+exports.formePharmas = formePharmas;
 
 function parseformePharma(designation, formePharmas){
 	for(var index=0; index<formePharmas.length; index++){
@@ -129,8 +130,7 @@ function parseformePharma(designation, formePharmas){
 	return "autres";
 }
 
-async function main() {
-	var date_deb = new Date().getTime();
+async function insertMedicamentsQueries() {
 	try {
 		try {
 			await mkdir(path.join(__dirname, bdpm_folder));
@@ -166,25 +166,31 @@ async function main() {
 		+ ' cip13 VARCHAR(15) PRIMARY KEY,'
 		+ ' formeGalenique VARCHAR(255) NOT NULL'
 		+ ');\n';
-		
+
+		var regex = new RegExp("'", "g");
 		for(var cis in CIS_bdpm){
 			if(CIS_CIP_bdpm[cis]){
-				inserts += "INSERT INTO Medicaments (nom, cip13, formeGalenique) VALUES (";
-				inserts += '\'' + CIS_bdpm[cis].nom.replace(/'/g, '\\\'') + '\'' + ", ";
-				inserts += '\'' + CIS_CIP_bdpm[cis].cip13.replace(/'/g, '\\\'') + '\'' + ", ";
-				inserts += '\'' + parseformePharma(CIS_bdpm[cis].formePharma, formePharmas).replace(/'/g, '\\\'') + '\'';
+				inserts += "INSERT INTO Medicaments (cip13, nom, formePharma) VALUES (";
+				inserts += '\'' + CIS_CIP_bdpm[cis].cip13.replace(regex, "''") + "'" + ", ";
+				inserts += '\'' + CIS_bdpm[cis].nom.replace(regex, "''") + "'" + ", ";
+				inserts += '\'' + parseformePharma(CIS_bdpm[cis].formePharma, formePharmas).replace(regex, "''") + "'";
 				inserts += ");\n";
+				inserts.replace(new RegExp(String.fromCharCode(9647), "g"), '');
+                inserts.replace(new RegExp(String.fromCharCode(9634), "g"), '');
+                inserts.replace(/\?\?H\?\?/g, '');
 			}
 		}
+
 		inserts+="COMMIT;"
 		await Promise.all([
 			writeFile('insertMedicaments.sql', inserts)
 		]);
 		
-		var date_fin = new Date().getTime();
-		console.log('temps pris : ' + (date_fin - date_deb) / 1000);
+		return inserts;
 	} catch (e) {
 		console.error(e);
+		return null;
 	}
 }
-main()
+
+module.exports.insertMedicamentsQueries = insertMedicamentsQueries;

@@ -3,10 +3,6 @@
 - Téléchargement des données brutes : http://base-donnees-publique.medicaments.gouv.fr/telechargement.php
 - Utilisation d'un projet github : https://github.com/TinyMan/bdpm-tools pour la transformation des données brutes en .json
 
-bdpm-tools : 
-- npm install
-- node index.js
-
 rest_api :
 - npm install
 - node server.js
