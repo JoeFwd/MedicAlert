@@ -182,10 +182,7 @@ async function insertMedicamentsQueries() {
 		}
 
 		inserts+="COMMIT;"
-		await Promise.all([
-			writeFile('insertMedicaments.sql', inserts)
-		]);
-		
+
 		return inserts;
 	} catch (e) {
 		console.error(e);

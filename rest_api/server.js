@@ -35,7 +35,7 @@ async function fillMedicamentsTable(){
     }
 }
 
-fillMedicamentsTable();
+//fillMedicamentsTable();
 
 app.use('/medicaments', medicamentRouter);
 app.use('/patients', patientRouter);
