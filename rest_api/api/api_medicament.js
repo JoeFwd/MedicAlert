@@ -2,6 +2,9 @@ var express = require('express');
 var tables = require('../tables');
 var connection = require('../connection');
 var utils = require('./utils');
+var auth = require('./authentification');
+var config = require('./config');
+var jwt = require('jsonwebtoken');
 
 const genericSelectMedicaments = 'SELECT * FROM ' + tables.tables.medicaments.nom;
 
@@ -184,102 +187,127 @@ function duplicateMedicamentResponse(req, res, next){
 }
 
 var medicamentRouter = express.Router();
-medicamentRouter.get('/cip13/:cip13', checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
-	res.statusCode = 200;
-	res.json(utils.removeIdAttribute(req.medicament[0]));
+medicamentRouter.get('/cip13/:cip13', auth.ensureToken, checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            res.statusCode = 200;
+            res.json(utils.removeIdAttribute(req.medicament[0]));
+	//}});
 });
-medicamentRouter.get('/nom/:nom/:limit?', findMedicamentContainingNom, function(req, res) {
-	res.statusCode = 200;
-	res.json(req.medicament.map(utils.removeIdAttribute));
+medicamentRouter.get('/nom/:nom/:limit?', auth.ensureToken, findMedicamentContainingNom, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, data){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            res.statusCode = 200;
+            res.json(req.medicament.map(utils.removeIdAttribute));
+	//}});
 });
-medicamentRouter.post('/', checkPostReqBodyValidity, duplicateMedicamentResponse, function(req, res) {
-	sql = 'INSERT INTO ' + tables.tables.medicaments.nom + ' (cip13, nom, formePharma) VALUES (?, ?, ?);';
-	var data = [
-		req.body.cip13,
-		req.body.nom,
-		req.body.formePharma
-	];
-	/*Evite les injections sql*/
-	connection.query(sql, data, function(err, result){
-		if(err){
-			console.error(err);
-			res.statusCode = 500;
-			return res.json({
-				errors: ['La création du médicament a échouée']
-			});
-		}
-		var sql = genericSelectMedicaments + ' WHERE cip13 = ?;';
-		connection.query(sql, [req.body.cip13], function(err, result){
-			if(err){
-				console.error(err);
-				res.statusCode = 500;
-				return res.json({
-					errors: ['Le médicament est introuvable après sa création']
-				});
-			}
-			res.statusCode = 201;
-			res.json(utils.removeIdAttribute(result[0]));
-		});
-	});
-});
-
-medicamentRouter.patch('/:cip13', checkCip13Validity, checkPatchReqBodyValidity, checkExistenceOfMedicamentWithCipAsParam, duplicateMedicamentResponse, function(req, res) {
-    if(utils.isEmptyObject(req.body)){
-        res.statusCode = 200;
-        return res.json({
-            succes: ['Aucune mise à jour']
+medicamentRouter.post('/', auth.ensureToken, checkPostReqBodyValidity, duplicateMedicamentResponse, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+    if(err){
+        res.sendStatus(403);
+    } else {*/
+        sql = 'INSERT INTO ' + tables.tables.medicaments.nom + ' (cip13, nom, formePharma) VALUES (?, ?, ?);';
+        var data = [
+            req.body.cip13,
+            req.body.nom,
+            req.body.formePharma
+        ];
+        /*Evite les injections sql*/
+        connection.query(sql, data, function(err, result){
+            if(err){
+                console.error(err);
+                res.statusCode = 500;
+                return res.json({
+                    errors: ['La création du médicament a échouée']
+                });
+            }
+            var sql = genericSelectMedicaments + ' WHERE cip13 = ?;';
+            connection.query(sql, [req.body.cip13], function(err, result){
+                if(err){
+                    console.error(err);
+                    res.statusCode = 500;
+                    return res.json({
+                        errors: ['Le médicament est introuvable après sa création']
+                    });
+                }
+                res.statusCode = 201;
+                res.json(utils.removeIdAttribute(result[0]));
+            });
         });
-    }
-
-	/*ecriture de la requête de modification*/
-	var sql = 'UPDATE ' + tables.tables.medicaments.nom + " SET ";
-	var data = [];
-	for(var key in req.body){
-		sql += key + '=?,';
-		data.push(req.body[key]);
-	}
-	sql = sql.substring(0, sql.length - 1);
-	sql += ' WHERE cip13 = ' + connection.escape(req.params.cip13) + ';';
-
-	/*requête de modification executée*/
-	connection.query(sql, data, function(err, result){
-		if(err){
-			console.error(err);
-			res.statusCode = 500;
-			return res.json({
-				errors: ['Le médicament n\'a pas pu être modifié']
-			});
-		}
-		var sql = genericSelectMedicaments + ' WHERE cip13 = ?;';
-		connection.query(sql, [req.body.cip13], function(err, result){
-			if(err){
-				console.error(err);
-				res.statusCode = 500;
-				return res.json({
-					errors: ['Le médicament est introuvable après sa modification']
-				});
-			}
-			res.statusCode = 200;
-			return res.json(utils.removeIdAttribute(result[0]));
-		});
-	});
+	//}});
 });
 
-medicamentRouter.delete('/:cip13', checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
-	var sql = 'DELETE FROM ' + tables.tables.medicaments.nom + ' WHERE cip13 = ?;';
-	connection.query(sql, [req.params.cip13], function(err, result){
-		if(err){
-			console.error(err);
-			res.statusCode = 500;
-			return res.json({
-				errors: ['Le médicament n\'a pas pu être supprimé']
-			});
-		}
-		res.statusCode = 200;
-		res.json({
-			succes: ['Le médicament a bien été supprimé']
-		});
-	});
+medicamentRouter.patch('/:cip13', auth.ensureToken, checkCip13Validity, checkPatchReqBodyValidity, checkExistenceOfMedicamentWithCipAsParam, duplicateMedicamentResponse, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            if(utils.isEmptyObject(req.body)){
+                res.statusCode = 200;
+                return res.json({
+                    succes: ['Aucune mise à jour']
+                });
+            }
+
+            /*ecriture de la requête de modification*/
+            var sql = 'UPDATE ' + tables.tables.medicaments.nom + " SET ";
+            var data = [];
+            for(var key in req.body){
+                sql += key + '=?,';
+                data.push(req.body[key]);
+            }
+            sql = sql.substring(0, sql.length - 1);
+            sql += ' WHERE cip13 = ' + connection.escape(req.params.cip13) + ';';
+
+            /*requête de modification executée*/
+            connection.query(sql, data, function(err, result){
+                if(err){
+                    console.error(err);
+                    res.statusCode = 500;
+                    return res.json({
+                        errors: ['Le médicament n\'a pas pu être modifié']
+                    });
+                }
+                var sql = genericSelectMedicaments + ' WHERE cip13 = ?;';
+                connection.query(sql, [req.body.cip13], function(err, result){
+                    if(err){
+                        console.error(err);
+                        res.statusCode = 500;
+                        return res.json({
+                            errors: ['Le médicament est introuvable après sa modification']
+                        });
+                    }
+                    res.statusCode = 200;
+                    return res.json(utils.removeIdAttribute(result[0]));
+                });
+            });
+	//}});
+});
+
+medicamentRouter.delete('/:cip13', auth.ensureToken, checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            var sql = 'DELETE FROM ' + tables.tables.medicaments.nom + ' WHERE cip13 = ?;';
+            connection.query(sql, [req.params.cip13], function(err, result){
+                if(err){
+                    console.error(err);
+                    res.statusCode = 500;
+                    return res.json({
+                        errors: ['Le médicament n\'a pas pu être supprimé']
+                    });
+                }
+                res.statusCode = 200;
+                res.json({
+                    succes: ['Le médicament a bien été supprimé']
+                });
+            });
+    //}});
 });
 
 module.exports = medicamentRouter;

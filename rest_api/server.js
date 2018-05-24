@@ -2,7 +2,6 @@
 
 var connection = require('./connection');
 var tables = require('./tables');
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -17,14 +16,17 @@ app.use(bodyParser.urlencoded({
 
 var index = require('./index');
 var medicamentRouter = require('./api/api_medicament');
-var patientRouter = require('./api/api_patient');
+var patient = require('./api/api_patient');
+var patientRouter = patient.router;
+var auth = require('./api/authentification');
+var authRouter = auth.router;
 
 tables.createAllTables();
 
 async function fillMedicamentsTable(){
-    var test = await index.insertMedicamentsQueries();
-    if(test == null) return;
-    var queries = test.split('\n');
+    var stringQueries = await index.insertMedicamentsQueries();
+    if(stringQueries == null) return;
+    var queries = stringQueries.split('\n');
     for(var i=0; i<queries.length; i++){
         await connection.query(queries[i], [], function(err, response){
             if(err){
@@ -39,6 +41,7 @@ async function fillMedicamentsTable(){
 
 app.use('/medicaments', medicamentRouter);
 app.use('/patients', patientRouter);
+app.use('', authRouter);
 
 var server = app.listen(port, function() {
 	console.log('Listening on port ' + port);

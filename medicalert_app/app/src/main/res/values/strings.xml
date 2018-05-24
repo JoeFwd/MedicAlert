@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MedicAlert</string>
+    <string name="register">S\'inscrire ici !</string>
+    <string name="login">Login</string>
+    <string name="shared_preferences">sharedPrefs</string>
+    <string name="tokenKey">token</string>
+    <string name="emailKey">email</string>
+    <string name="nextStepInscription">Choisir son aide-soignant</string>
+    <string name="bonjour">Bonjour Marc Dupont !</string>
+    <string name="tab_aidesoignant_1">Pharmacie</string>
+    <string name="tab_aidesoignant_2">Traitements</string>
+    <string name="tab_aidesoignant_3">Rendez-vous</string>
+    <string name="tab_patient_1">Mes traitements</string>
+    <string name="tab_patient_2">Mes rendez-vous</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="modifier">Modifier</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="cip13">cip13</string>
+    <string name="nom">nom</string>
+    <string name="forme_pharma">forme pharmaceutique</string>
+    <string name="cip13_modif">cip13 du médicament à modifier</string>
+</resources>
