@@ -42,9 +42,14 @@ patientRouter.post('/', auth.ensureToken, responseForDuplicateEmails, function(r
         if(err){
             res.sendStatus(403);
         } else {*/
-            var sql = 'SELECT * FROM ' + tables.tables.patients.nom + ' WHERE email = ?;';
+            var sql = 'INSERT INTO ' + tables.tables.patients.nom + ' (';
+            var values = "";
 
-            sql = 'INSERT INTO ' + tables.tables.patients.nom + ' ('+attr[0]+', '+attr[1]+', '+attr[2]+', '+attr[3]+', '+attr[4]+') VALUES (?,?,?,?,?);';
+            for(var i=0; i<tables.tables.patients.attr.length; i++){
+                sql+= attr[i] + ",";
+                values += '?,';
+            }
+            sql = sql.substring(0, sql.length - 1) + ') VALUES (' + values.substring(0, values.length-1) + ");";
 
             bcrypt.hash(req.body[attr[1]], config.saltRounds, function(err, hash) {
                 data = [
@@ -52,7 +57,8 @@ patientRouter.post('/', auth.ensureToken, responseForDuplicateEmails, function(r
                     hash,
                     req.body[attr[2]],
                     req.body[attr[3]],
-                    req.body[attr[4]]
+                    req.body[attr[4]],
+                    req.body[attr[5]]
                 ];
                 connection.query(sql, data, function(error, response){
                     if(error){
@@ -64,9 +70,8 @@ patientRouter.post('/', auth.ensureToken, responseForDuplicateEmails, function(r
                     }
                     res.statusCode = 201;
                     return res.json({
-                        succes: "Patient crée avec succès"
+                        succes: true
                     });
-
                 });
             });
     //}});
@@ -96,28 +101,20 @@ patientRouter.patch('/:email', auth.ensureToken, responseForDuplicateEmails, fun
                         data.push(req.body[key]);
                 }
 
-                sql = sql.substring(0, sql.length - 1);
-                sql += ' WHERE ' + attr[0] + ' = ' + connection.escape(req.params[attr[0]]) + ';';
+                sql = sql.substring(0, sql.length - 1) + ' WHERE ' + attr[0] + ' = ' + connection.escape(req.params[attr[0]]) + ';';
 
-                connection.query(sql, data, function(err, result){
-                    if(err){
-                        console.error(err);
+                connection.query(sql, data, function(updateErr, updateResult){
+                    if(updateErr){
+                        console.error(updateErr);
                         res.statusCode = 500;
                         return res.json({
-                            errors: ['Le patient n\'a pas pu être modifié']
+                            errors: ['Le patient n\'a pas pu être modifié'],
+                            succes: false
                         });
                     }
-                    sql = 'SELECT * FROM ' + tables.tables.patients.nom + ' WHERE email = ?;';
-                    connection.query(sql, [req.params.email], function(err, result){
-                        if(err){
-                            console.error(err);
-                            res.statusCode = 500;
-                            return res.json({
-                                errors: ['Le patient est introuvable après sa modification']
-                            });
-                        }
-                        res.statusCode = 200;
-                        res.json(utils.removeIdAttribute(result[0]));
+                    res.statusCode = 200;
+                    res.json({
+                        succes: true
                     });
                 });
             });

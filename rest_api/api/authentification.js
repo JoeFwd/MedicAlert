@@ -24,6 +24,7 @@ authRouter.post('/login', checkExistenceofEmail, function(req, res) {
             if(compareResult){
                 res.statusCode = 200;
                 res.json({
+                    id: result[0].id,
                     token: jwt.sign({
                             id: result[0].id,
                             email: result[0].email,
