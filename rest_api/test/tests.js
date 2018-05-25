@@ -425,22 +425,75 @@ function supprimerPatient(patient){
     });
 }
 
+function ajouterAideSoignant(aideSoignant){
+    var attr = tables.tables.aideSoignants.attr;
+    var sql = 'INSERT INTO ' + tables.tables.aideSoignants.nom + ' (';
+    var values = "";
+
+    for(var i=0; i<tables.tables.aideSoignants.attr.length; i++){
+        sql+= attr[i] + ",";
+        values += '?,';
+    }
+    sql = sql.substring(0, sql.length - 1) + ') VALUES (' + values.substring(0, values.length-1) + ");";
+
+
+    bcrypt.hash(aideSoignant[attr[1]], config.saltRounds, function(err, hash) {
+        data = [
+            aideSoignant[attr[0]],
+            hash,
+            aideSoignant[attr[2]],
+            aideSoignant[attr[3]],
+            aideSoignant[attr[4]],
+            aideSoignant[attr[5]]
+        ];
+        connection.query(sql, data, function(erro, response){
+            if(erro){
+                console.error("erreur ajout aide soignant" + erro);
+            }
+        });
+    });
+}
+
+function supprimerAideSoignant(aideSoignant){
+    connection.query('DELETE FROM ' + tables.tables.aideSoignants.nom + ' WHERE email = ?', [aideSoignant.email], function(err, result){
+        if(err) console.error(err);
+    });
+}
+
 describe('POST patient', function () {
+    let aideSoignant= {
+        email: 'dummy@aidesoignant.com',
+        password: 'plain_password',
+        prenom: 'Marc',
+        nom: 'March',
+        date_naissance:'1989-01-09',
+        adresse:"Palais Longchamps"
+    };
+
     let patient = {
         email: 'dummy@adress.com',
         password: 'plain_password',
         prenom: 'Marc',
         nom: 'March',
-        date_naissance:'1989-01-09'
+        date_naissance:'1989-01-09',
+        aide_soignant:1
     };
+	before(function () {
+        ajouterAideSoignant(aideSoignant);
+	});
 
+	after(function (done) {
+        supprimerAideSoignant(aideSoignant);
+        done();
+	});
     it('Cela devrait ajouter un patient', function (done) {
         let autre_patient = {
             email: 'another@api.com',
             password: 'plain_password',
             prenom: 'Corentin',
             nom: 'Boucher',
-            date_naissance:'1991-11-02'
+            date_naissance:'1991-11-02',
+            aide_soignant:1
         };
         chai.request(server)
             .post('/patients')
@@ -449,48 +502,44 @@ describe('POST patient', function () {
             .end(function (err, res) {
                 res.should.have.status(201);
                 res.body.should.have.property('succes');
+                res.body.succes.should.be.eql(true);
                 supprimerPatient(autre_patient);
                 done();
             });
     });
-
-    /* Ne pas marche -> Mais marche en testant manuellement.
-    it('Ajouter un nouveau patient avec un email déjà existant devrait échouer', function (done) {
-        ajouterPatient(patient);
-        let autre_patient = {
-            email: patient.email,
-            password: '123456',
-            prenom: 'Dark',
-            nom: "Borune",
-            date_naissance: "1996-04-04"
-        };
-        chai.request(server)
-            .post('/patients')
-            .send(autre_patient)
-            .end(function (err, res) {
-                res.should.have.status(500);
-                res.body.should.have.property('errors');
-                done();
-            });
-    });*/
 });
 
-/*describe('PATCH patient', function () {
+describe('PATCH patient', function () {
+    let aideSoignant= {
+        email: 'dummy@aidesoignant.com',
+        password: 'plain_password',
+        prenom: 'Marc',
+        nom: 'March',
+        date_naissance:'1989-01-09',
+        adresse:"Palais Longchamps"
+    };
+	before(function () {
+        ajouterAideSoignant(aideSoignant);
+	});
+
+	after(function (done) {
+        supprimerAideSoignant(aideSoignant);
+        done();
+	});
 	let patient = {
         email: 'test@api.com',
         password: 'great_password',
         prenom: 'Jean',
         nom: 'Damien',
-        date_naissance:'1972-03-22'
+        date_naissance:'1972-03-22',
+        aide_soignant:1
     };
     let newPassword = "abcdef!";
     let newEmail = "new_email@adress.com";
     let newName = "Bob";
+    let newAideSoignant = "2";
 	beforeEach(function () {
 	    ajouterPatient(patient);
-	});
-	afterEach(function () {
-	   supprimerPatient(patient);
 	});
    it('Cela devrait modifier un patient', function (done) {
         chai.request(server)
@@ -498,78 +547,25 @@ describe('POST patient', function () {
             .send({
                 email : newEmail,
                 password : newPassword,
-                nom : newName
+                nom : newName,
+                aide_soignant:newAideSoignant
             })
             .end(function (err, res) {
                 res.should.have.status(200);
                 res.body.should.have.property('succes');
+                res.body.succes.should.be.eql(true);
+                supprimerPatient({
+                    email: newEmail,
+                    password: newPassword,
+                    prenom: patient.prenom,
+                    nom: newName,
+                    date_naissance:patient.date_naissance,
+                    aide_soignant:newAideSoignant
+                });
                 done();
             });
     });
-
-    it('Une requête de modifition sans paramêtre ne devrait rien modifier', function (done) {
-        chai.request(server)
-            .patch('/patients/' + patient.email)
-            .end(function (err, res) {
-                res.should.have.status(200);
-                res.body.should.be.a('object');
-                res.body.should.have.property('message');
-                done();
-            });
-    });
-
-    it('Une requête de modifition avec un email qui n\'existe pas devrait échouer', function (done) {
-        chai.request(server)
-            .patch('/patients/' + newEmail)
-            .end(function (err, res) {
-                res.should.have.status(404);
-                res.body.should.have.property('errors');
-                done();
-            });
-    });
-
-    /*it('Une requête de modifition avec un mauvais code cip devrait échouer', function (done) {
-        let cip = 'testcip';
-        chai.request(server)
-            .patch('/medicaments/' + cip)
-            .end(function (err, res) {
-                res.should.have.status(400);
-                res.body.should.have.property('errors');
-                done();
-            });
-    });
-
-    it('Trop de paramètres devrait faire échouer la requête', function (done) {
-               let updatedNom = 'Smecta 200'
-               chai.request(server)
-                   .patch('/medicaments/' + obj.cip13)
-                   .send({
-                       cip13: obj.cip13,
-                       nom : updatedNom,
-                       formePharma: obj.formePharma
-                   })
-                   .end(function (err, res) {
-                       res.should.have.status(400);
-                       res.body.should.have.property('errors');
-                       done();
-                   });
-           });
-
-    it('Paramètres qui ne correspondent pas aux attributs de la table Médicament devrait faire échouer la requête', function (done) {
-        let updatedNom = 'Smecta 200'
-        chai.request(server)
-            .patch('/medicaments/' + obj.cip13)
-            .send({
-                nom : updatedNom,
-                formeAleatoire: obj.formePharma
-            })
-            .end(function (err, res) {
-                res.should.have.status(400);
-                res.body.should.have.property('errors');
-                done();
-            });
-    });
-});*/
+});
 
 describe('/login', function () {
     after(function (done) {

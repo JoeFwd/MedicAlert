@@ -12,9 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.test.medicalert.Medicament;
 import com.example.test.medicalert.api_request.AuthorisationRequest;
 import com.example.test.medicalert.utils.EditTextToolbox;
 import com.example.test.medicalert.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends Activity{
 
@@ -50,16 +54,29 @@ public class LoginActivity extends Activity{
                     return;
                 }
 
-                String token = AuthorisationRequest.login(email.trim(), password.trim());
-                if(token == null){
+                JSONObject auth= AuthorisationRequest.login(email.trim(), password.trim());
+                if(auth == null){
                     Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
                     EditTextToolbox.setEditTextToBlank(emailEditText);
                     EditTextToolbox.setEditTextToBlank(passwordEditText);
                     return;
                 }
 
+                String token;
+                int id;
+                try {
+                    token = auth.getString(getString(R.string.tokenKey));
+                    id = auth.getInt("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(LoginActivity.this, "Failed to login : auth", Toast.LENGTH_SHORT).show();
+                    EditTextToolbox.setEditTextToBlank(emailEditText);
+                    EditTextToolbox.setEditTextToBlank(passwordEditText);
+                    return;
+                }
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("userId", id);
                 editor.putString(getString(R.string.tokenKey), token);
                 editor.putString(getString(R.string.emailKey), email);
                 editor.apply();

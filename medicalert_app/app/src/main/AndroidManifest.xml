@@ -17,16 +17,17 @@
         <activity
             android:name="com.example.test.medicalert.activities.AideSoignantMenuActivity"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name="com.example.test.medicalert.activities.AjouterMedicamentActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.ModifierMedicamentActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.SupprimerMedicamentActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.test.medicalert.activities.AjouterMedicamentActivity"/>
-        <activity android:name="com.example.test.medicalert.activities.ModifierMedicamentActivity"/>
-        <activity android:name="com.example.test.medicalert.activities.SupprimerMedicamentActivity"/>
-        <activity android:name="com.example.test.medicalert.activities.LoginActivity"/>
         <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentActivity"/>
 
     </application>

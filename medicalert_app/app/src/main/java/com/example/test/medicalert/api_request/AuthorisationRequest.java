@@ -13,9 +13,8 @@ public final class AuthorisationRequest {
      * Checks if the email and password are matching the one's in the database. If yes, then a token is generated and sent to the user.
      * Otherwise this method returns null;
      */
-    public static String login(String email, String password){
+    public static JSONObject login(String email, String password){
         JSONObject jsonToken=null;
-        String token;
         HashMap<String, String> map = new HashMap<>();
         map.put(Patient.emailKey, email);
         map.put(Patient.passwordKey, password);
@@ -25,15 +24,13 @@ public final class AuthorisationRequest {
             jsonToken = request.execute(AUTHORISATION_URL + "/login").get();
             if(jsonToken == null) return null;
             if(jsonToken.getBoolean("succes")){
-                token = jsonToken.getString("token");
+                return jsonToken;
             } else {
-                token = null;
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return token;
     }
 }

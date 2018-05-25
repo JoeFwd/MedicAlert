@@ -3,6 +3,7 @@ package com.example.test.medicalert.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +35,7 @@ public class SignUpActivity extends Activity {
         dateNaissanceEditText.setHint("ex : 04/05/1986");
 
         /*SharedPreferences p = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
-        emailEditText.setText(p.getString(getString(R.string.emailKey), "noEmail"));
+        emailEditText.setText(""+p.getInt(getString(R.string.userId), 25));
         passwordEditText.setText(p.getString(getString(R.string.tokenKey), "noPassword"));*/
 
         Button registerButton = (Button) findViewById(R.id.register_button);
