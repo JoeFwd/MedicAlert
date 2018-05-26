@@ -186,7 +186,28 @@ function duplicateMedicamentResponse(req, res, next){
 	});
 }
 
+
 var medicamentRouter = express.Router();
+medicamentRouter.get('/formePharma/:formePharma', auth.ensureToken, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            sql = 'SELECT * FROM ' + tables.tables.medicaments.nom +' WHERE formePharma = ?;';
+            connection.query(sql, [req.params.formePharma], function(err, result){
+                if(err){
+                    console.error(err);
+                    res.statusCode = 500;
+                    return res.json({
+                        errors: ['La requête a a échouée'],
+                        succes : false
+                    });
+                }
+                res.statusCode = 200;
+                res.json(result.map(utils.removeIdAttribute));
+            });
+	//}});
+});
 medicamentRouter.get('/cip13/:cip13', auth.ensureToken, checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
 	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
         if(err){

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
+
 import com.example.test.medicalert.R;
 
 public class AideSoignantMenuActivity extends AppCompatActivity {
@@ -26,9 +26,9 @@ public class AideSoignantMenuActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager){
         SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Tab1Fragment(), getString(R.string.tab_aidesoignant_1));
-        adapter.addFragment(new Tab2Fragment(), getString(R.string.tab_aidesoignant_2));
-        adapter.addFragment(new Tab3Fragment(), getString(R.string.tab_aidesoignant_3));
+        adapter.addFragment(new PharmacieTabFragment(), getString(R.string.tab_aidesoignant_1));
+        adapter.addFragment(new TraitementAideSoignantTabFragment(), getString(R.string.tab_aidesoignant_2));
+        adapter.addFragment(new RendezVousAideSoignantTabFragment(), getString(R.string.tab_aidesoignant_3));
         viewPager.setAdapter(adapter);
     }
 }

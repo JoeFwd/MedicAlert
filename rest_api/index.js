@@ -115,6 +115,7 @@ const formePharmas = [
 	"suppositoire",
 	"suspension",
 	"vernis",
+	"autres"
 ];
 exports.formePharmas = formePharmas;
 
@@ -175,9 +176,9 @@ async function insertMedicamentsQueries() {
 				inserts += '\'' + CIS_bdpm[cis].nom.replace(regex, "''") + "'" + ", ";
 				inserts += '\'' + parseformePharma(CIS_bdpm[cis].formePharma, formePharmas).replace(regex, "''") + "'";
 				inserts += ");\n";
-				inserts.replace(new RegExp(String.fromCharCode(9647), "g"), '');
+				/*inserts.replace(new RegExp(String.fromCharCode(9647), "g"), '');
                 inserts.replace(new RegExp(String.fromCharCode(9634), "g"), '');
-                inserts.replace(/\?\?H\?\?/g, '');
+                inserts.replace(/\?\?H\?\?/g, '');*/
 			}
 		}
 

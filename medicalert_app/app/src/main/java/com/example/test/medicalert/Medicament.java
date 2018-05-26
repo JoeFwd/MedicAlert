@@ -38,6 +38,6 @@ public class Medicament {
 
     @Override
     public String toString(){
-        return this.cip13 + " " + this.nom + " " + this.formePharma;
+        return "Nom : " + this.nom + "\n" + "cip13 : " + this.cip13+ "\n" + "Forme pharmaceutique : " + this.formePharma ;
     }
 }

@@ -9,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.test.medicalert.R;
 
-public class Tab3Fragment extends Fragment {
-    private static final String TAG =  "Tab1Fragment";
+public class TraitementAideSoignantTabFragment extends Fragment {
+    private static final String TAG =  "PharmacieTabFragment";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab3, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_aide_soignant_traitement, container, false);
         return view;
     }
 }

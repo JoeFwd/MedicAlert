@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
 
 authRouter = express.Router();
 
-authRouter.post('/login', checkExistenceofEmail, function(req, res) {
+authRouter.post('/patients/login', checkExistenceOfPatientEmail, function(req, res) {
 	let email = 'email';
 	let password = 'password';
     let sql = 'SELECT * FROM ' + tables.tables.patients.nom + ' WHERE email = ?;';
@@ -17,7 +17,8 @@ authRouter.post('/login', checkExistenceofEmail, function(req, res) {
             console.error(err);
             res.statusCode = 500;
             return res.json({
-                errors: ['Erreur']
+                errors: ['Erreur'],
+                succes: false
             });
         }
         bcrypt.compare(req.body[password], result[0].password, function(err, compareResult) {
@@ -26,11 +27,9 @@ authRouter.post('/login', checkExistenceofEmail, function(req, res) {
                 res.json({
                     id: result[0].id,
                     token: jwt.sign({
-                            id: result[0].id,
                             email: result[0].email,
                             prenom: result[0].prenom,
                             nom: result[0].nom,
-                            date_naissance: result[0].date_naissance
                     }, config.secret),
                     succes: true
                 });
@@ -44,23 +43,83 @@ authRouter.post('/login', checkExistenceofEmail, function(req, res) {
     });
 });
 
-function checkExistenceofEmail(req, res, next){
+authRouter.post('/aide_soignants/login', checkExistenceOfAideSoignantEmail, function(req, res) {
+	let email = 'email';
+	let password = 'password';
+    let sql = 'SELECT * FROM ' + tables.tables.aideSoignants.nom + ' WHERE email = ?;';
+
+    connection.query(sql, [req.body[email]], function(err, result){
+        if(err){
+            console.error(err);
+            res.statusCode = 500;
+            return res.json({
+                errors: ['Erreur'],
+                succes: false
+            });
+        }
+        bcrypt.compare(req.body[password], result[0].password, function(err, compareResult) {
+            if(compareResult){
+                res.statusCode = 200;
+                res.json({
+                    id: result[0].id,
+                    token: jwt.sign({
+                            email: result[0].email,
+                            prenom: result[0].prenom,
+                            nom: result[0].nom,
+                    }, config.secret),
+                    succes: true
+                });
+            } else {
+                res.statusCode = 400;
+                return res.json({
+                    succes: false
+                });
+            }
+        });
+    });
+});
+
+function checkExistenceOfPatientEmail(req, res, next){
     sql = 'SELECT * FROM ' + tables.tables.patients.nom + ' WHERE email = ?;';
 	connection.query(sql, [req.body['email']], function(err, result){
 		if(err){
 			console.error(err);
 			res.statusCode = 500;
 			return res.json({
-				errors: ['Le patient ne peut être récupéré']
+				errors: ['La requête a échoué'],
+				succes : false
 			});
 		}
 		if(result.length === 0){
 			res.statusCode = 404;
 			return res.json({
-				errors: ['Patient not found'],
-				notFound: true
+				errors: ['not found'],
+				succes: false
 			});
 		}
+		next();
+	});
+}
+
+function checkExistenceOfAideSoignantEmail(req, res, next){
+    sql = 'SELECT * FROM ' + tables.tables.aideSoignants.nom + ' WHERE email = ?;';
+	connection.query(sql, [req.body['email']], function(err, result){
+		if(err){
+			console.error(err);
+			res.statusCode = 500;
+			return res.json({
+				errors: ['La requête a échoué'],
+				succes : false
+			});
+		}
+		if(result.length === 0){
+			res.statusCode = 404;
+			return res.json({
+				errors: ['not found'],
+				succes: false
+			});
+		}
+		console.log("Hey");
 		next();
 	});
 }

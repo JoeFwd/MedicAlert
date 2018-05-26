@@ -13,7 +13,7 @@ public final class AuthorisationRequest {
      * Checks if the email and password are matching the one's in the database. If yes, then a token is generated and sent to the user.
      * Otherwise this method returns null;
      */
-    public static JSONObject login(String email, String password){
+    public static JSONObject loginAsPatient(String email, String password){
         JSONObject jsonToken=null;
         HashMap<String, String> map = new HashMap<>();
         map.put(Patient.emailKey, email);
@@ -21,7 +21,28 @@ public final class AuthorisationRequest {
         PostRequestWithResponse request = new PostRequestWithResponse(map);
 
         try {
-            jsonToken = request.execute(AUTHORISATION_URL + "/login").get();
+            jsonToken = request.execute(AUTHORISATION_URL + "/patients/login").get();
+            if(jsonToken == null) return null;
+            if(jsonToken.getBoolean("succes")){
+                return jsonToken;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static JSONObject loginAsAideSoignant(String email, String password){
+        JSONObject jsonToken=null;
+        HashMap<String, String> map = new HashMap<>();
+        map.put(Patient.emailKey, email);
+        map.put(Patient.passwordKey, password);
+        PostRequestWithResponse request = new PostRequestWithResponse(map);
+
+        try {
+            jsonToken = request.execute(AUTHORISATION_URL + "/aide_soignants/login").get();
             if(jsonToken == null) return null;
             if(jsonToken.getBoolean("succes")){
                 return jsonToken;

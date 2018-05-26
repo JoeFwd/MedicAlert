@@ -1,26 +1,26 @@
 package com.example.test.medicalert;
 
-public class Patient {
+public class AideSoignant {
     public static final String emailKey = "email";
     public static final String passwordKey = "password";
     public static final String prenomKey = "prenom";
     public static final String nomKey = "nom";
     public static final String dateNaissanceKey = "date_naissance";
-    public static final String idAideSoignantKey = "id_aide_soignant";
+    public static final String adresseKey = "adresse";
     private String email;
     private String password;
     private String prenom;
     private String nom;
     private String dateNaissance;
-    private int idAideSoignant;
+    private String adresse;
 
-    public Patient(String email, String password, String prenom, String nom, String dateNaissance, int idAideSoignant){
+    public AideSoignant(String email, String password, String prenom, String nom, String dateNaissance, String adresse){
         this.email = email;
         this.password = password;
         this.prenom = prenom;
         this.nom = nom;
         this.dateNaissance = dateNaissance;
-        this.idAideSoignant = idAideSoignant;
+        this.adresse = adresse;
     }
 
     public String getEmail() {
@@ -43,6 +43,5 @@ public class Patient {
         return dateNaissance;
     }
 
-    public int getIdAideSoignant() { return idAideSoignant;}
+    public String getAdresse() { return adresse;}
 }
-

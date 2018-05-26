@@ -4,8 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/message_recherche"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
     <ListView
-        android:id="@+id/recherche_type"
+        android:id="@+id/search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >

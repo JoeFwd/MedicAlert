@@ -19,8 +19,8 @@ public final class RequestValues {
     protected static String REQUEST_POST = "POST";
     protected static String REQUEST_DELETE = "DELETE";
     protected static String REQUEST_PATCH = "PATCH";
-    protected static int READ_TIMEOUT = 3000;
-    protected static int CONNECTION_TIMEOUT = 3000;
+    protected static int READ_TIMEOUT = 1000;
+    protected static int CONNECTION_TIMEOUT = 1000;
 
     private RequestValues(){}
 

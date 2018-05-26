@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.test.medicalert.R;
 
@@ -14,8 +13,7 @@ public class PatientMenuActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aidesoignant_menu);
-        Log.d("TAG", "OnCreate Starting");
+        setContentView(R.layout.activity_patient_menu);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
@@ -26,8 +24,8 @@ public class PatientMenuActivity extends AppCompatActivity{
 
     private void setupViewPager(ViewPager viewPager){
         SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Tab1Fragment(), getString(R.string.tab_patient_1));
-        adapter.addFragment(new Tab2Fragment(), getString(R.string.tab_patient_2));
+        adapter.addFragment(new TraitementPatientTabFragment(), getString(R.string.tab_patient_1));
+        adapter.addFragment(new RendezVousAideSoignantTabFragment(), getString(R.string.tab_patient_2));
         viewPager.setAdapter(adapter);
     }
 }

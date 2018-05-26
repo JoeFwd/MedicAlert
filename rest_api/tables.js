@@ -1,4 +1,5 @@
 var connection = require('./connection');
+var index = require("./index");
 
 const tables = {
     medicaments : {nom : "Medicaments", attr : ['cip13', 'nom', 'formePharma']},
@@ -7,15 +8,21 @@ const tables = {
     traitements : {nom : "Traitements", attr : ['id_patient', 'id_aide_soignant', 'nom', 'date_debut', 'duree_traitement', 'matin', 'apres_midi', 'soir']},
     traitementsMedicament : {nom : "Traitements_Medicament", attr : ['id_traitement', 'id_medicament', 'dosage', 'date_peremption']},
     rendezVous : {nom : "Rendez_Vous", attr : ['id_patient', 'id_aide_soignant', 'date_rdv']},
+    medicamentCategorie : {nom : "Medicament_Categorie", attr : ['categorie']}
 };
 exports.tables = tables;
 
 const createTables = [
+        'CREATE TABLE IF NOT EXISTS ' + tables.medicamentCategorie.nom + '('
+        + tables.medicamentCategorie.attr[0] + ' VARCHAR(64) PRIMARY KEY'
+        + ')',
+
         'CREATE TABLE IF NOT EXISTS ' + tables.medicaments.nom + '('
         + 'id INT AUTO_INCREMENT PRIMARY KEY,'
         + tables.medicaments.attr[0] + ' VARCHAR(13) NOT NULL,'
         + tables.medicaments.attr[1] + ' VARCHAR(256) NOT NULL,'
         + tables.medicaments.attr[2] + ' VARCHAR(64) NOT NULL,'
+        + 'FOREIGN KEY(' + tables.medicaments.attr[2] + ') REFERENCES ' + tables.medicamentCategorie.nom + '(' + tables.medicamentCategorie.attr[0] + '),'
         + 'CONSTRAINT UniqueCIP UNIQUE(' + tables.medicaments.attr[0] +')'
         + ')',
 
@@ -82,16 +89,35 @@ function notifyCreatedTable(result, table){
 	else console.log('Unknown table warning');
 }
 
-async function createAllTables(){
-    for(var i=0; i<createTables.length; i++){
-        await connection.query(createTables[i], function(err, result){
-            if(err){
-                console.error(err);
-                return;
-            }
-            //notifyCreatedTable(result, medicamentsTable);
-        });
-    }
+function createAllTables(){
+    return new Promise(function(resolve, reject) {
+        for(var i=0; i<createTables.length; i++){
+            connection.query(createTables[i], function(err, result){
+                if(err){
+                    reject(err);
+                }
+                //notifyCreatedTable(result, medicamentsTable);
+            });
+        }
+        resolve();
+    });
 }
 
 exports.createAllTables = createAllTables;
+
+function fillMedicamentCategorieTable(){
+    return new Promise(function(resolve, reject) {
+        var formePharmas = index.formePharmas;
+        for(var i=0; i<formePharmas.length; i++){
+            var sql = "INSERT INTO " + tables.medicamentCategorie.nom + '(' + tables.medicamentCategorie.attr[0] + ') VALUES (?);';
+            connection.query(sql, [formePharmas[i]], function(err, response){
+                if(err){
+                    reject(err);
+                }
+            });
+        }
+        resolve();
+    });
+}
+
+exports.fillMedicamentCategorieTable = fillMedicamentCategorieTable;

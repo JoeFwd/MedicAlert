@@ -24,6 +24,7 @@ public final class PatientRequest {
         String dateNaissance = patient.getDateNaissance(), parsedDateNaissance;
 
         if(!DateValidator.isDateValid(dateNaissance, "dd/MM/yyyy")){
+            Log.e("PatientRequest : ", "date_naissance not valid");
             return false;
         }
 
@@ -35,7 +36,7 @@ public final class PatientRequest {
         }
 
         map.put(Patient.dateNaissanceKey, parsedDateNaissance);
-        Log.v("Date naissance", map + "");
+        map.put(Patient.idAideSoignantKey, patient.getIdAideSoignant() + "");
         PostRequest request;
         Integer requestCode;
         try {
@@ -48,7 +49,6 @@ public final class PatientRequest {
             e.printStackTrace();
             return false;
         }
-        Log.v("code", requestCode + "");
         return (requestCode == HttpURLConnection.HTTP_CREATED)?true:false;
     }
 }

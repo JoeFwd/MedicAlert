@@ -11,9 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity"/>
+        <activity android:name=".activities.MainActivity">
+        </activity>
         <activity android:name="com.example.test.medicalert.activities.SignUpActivity"/>
-        <activity android:name="com.example.test.medicalert.activities.PatientMenuActivity"/>
+        <activity
+            android:name="com.example.test.medicalert.activities.PatientMenuActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name="com.example.test.medicalert.activities.AideSoignantMenuActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -29,6 +33,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentParNomActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentParCategorieActivity"/>
 
     </application>
 

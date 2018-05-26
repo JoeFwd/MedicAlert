@@ -20,28 +20,43 @@ var patient = require('./api/api_patient');
 var patientRouter = patient.router;
 var auth = require('./api/authentification');
 var authRouter = auth.router;
+var categorie = require('./api/api_categorie');
+var categorieRouter = categorie.router;
+var aideSoignant = require('./api/api_aide_soignant');
+var aideSoignantRouter = aideSoignant.router;
 
-tables.createAllTables();
 
-async function fillMedicamentsTable(){
-    var stringQueries = await index.insertMedicamentsQueries();
-    if(stringQueries == null) return;
+var errHandler = function(err) {
+    console.log(err);
+}
+
+/*var createTablePromise = tables.createAllTables();
+createTablePromise.then(function(resolve, reject){
+    var fillMedicamentCategorieTablePromise = tables.fillMedicamentCategorieTable();
+    return fillMedicamentCategorieTablePromise;
+}, errHandler)
+.then(function(resolve, reject){
+    var stringQueries = index.insertMedicamentsQueries();
+    return stringQueries;
+}, errHandler)
+.then(function(stringQueries){
+    if(stringQueries == null) console.log("Couldn't retrieve inserts queries");
     var queries = stringQueries.split('\n');
     for(var i=0; i<queries.length; i++){
-        await connection.query(queries[i], [], function(err, response){
+        connection.query(queries[i], [], function(err, response){
             if(err){
-                console.error(err);
-                return;
+                errHandler(err);
             }
         });
     }
-}
+});*/
 
-//fillMedicamentsTable();
 
 app.use('/medicaments', medicamentRouter);
 app.use('/patients', patientRouter);
 app.use('', authRouter);
+app.use('/categorie', categorieRouter);
+app.use('/aide_soignants', aideSoignantRouter);
 
 var server = app.listen(port, function() {
 	console.log('Listening on port ' + port);

@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.test.medicalert.AideSoignant;
 import com.example.test.medicalert.Medicament;
+import com.example.test.medicalert.Patient;
 import com.example.test.medicalert.api_request.AuthorisationRequest;
 import com.example.test.medicalert.utils.EditTextToolbox;
 import com.example.test.medicalert.R;
@@ -54,35 +56,23 @@ public class LoginActivity extends Activity{
                     return;
                 }
 
-                JSONObject auth= AuthorisationRequest.login(email.trim(), password.trim());
-                if(auth == null){
-                    Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
-                    EditTextToolbox.setEditTextToBlank(emailEditText);
-                    EditTextToolbox.setEditTextToBlank(passwordEditText);
-                    return;
+                JSONObject auth= AuthorisationRequest.loginAsAideSoignant(email.trim(), password.trim());
+                if(auth != null){
+                    storeUserInformation(auth);
+                    Intent intent = new Intent(activityContext, AideSoignantMenuActivity.class);
+                    startActivity(intent);
+                } else {
+                    auth = AuthorisationRequest.loginAsPatient(email.trim(), password.trim());
+                    if (auth != null) {
+                        storeUserInformation(auth);
+                        Intent intent = new Intent(activityContext, PatientMenuActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
+                        EditTextToolbox.setEditTextToBlank(emailEditText);
+                        EditTextToolbox.setEditTextToBlank(passwordEditText);
+                    }
                 }
-
-                String token;
-                int id;
-                try {
-                    token = auth.getString(getString(R.string.tokenKey));
-                    id = auth.getInt("id");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(LoginActivity.this, "Failed to login : auth", Toast.LENGTH_SHORT).show();
-                    EditTextToolbox.setEditTextToBlank(emailEditText);
-                    EditTextToolbox.setEditTextToBlank(passwordEditText);
-                    return;
-                }
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("userId", id);
-                editor.putString(getString(R.string.tokenKey), token);
-                editor.putString(getString(R.string.emailKey), email);
-                editor.apply();
-
-                Intent intent = new Intent(activityContext, AideSoignantMenuActivity.class);
-                startActivity(intent);
             }
 
         });
@@ -95,6 +85,26 @@ public class LoginActivity extends Activity{
             }
 
         });
+    }
+
+    private void storeUserInformation(JSONObject auth){
+        String token;
+        int id;
+        try {
+            token = auth.getString(getString(R.string.tokenKey));
+            id = auth.getInt(getString(R.string.idKey));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(LoginActivity.this, "Failed to login : auth", Toast.LENGTH_SHORT).show();
+            EditTextToolbox.setEditTextToBlank(emailEditText);
+            EditTextToolbox.setEditTextToBlank(passwordEditText);
+            return;
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(getString(R.string.userId), id);
+        editor.putString(getString(R.string.tokenKey), token);
+        editor.apply();
     }
 
 }

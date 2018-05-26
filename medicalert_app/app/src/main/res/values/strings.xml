@@ -20,4 +20,6 @@
     <string name="forme_pharma">forme pharmaceutique</string>
     <string name="cip13_modif">cip13 du médicament à modifier</string>
     <string name="userId">userId</string>
+    <string name="aide_soignant">Aide-soignant</string>
+    <string name="idKey">id</string>
 </resources>

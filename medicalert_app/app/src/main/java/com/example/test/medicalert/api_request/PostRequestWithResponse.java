@@ -1,6 +1,8 @@
 package com.example.test.medicalert.api_request;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
 import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
@@ -19,7 +21,10 @@ public class PostRequestWithResponse extends AsyncTask<String, Void, JSONObject>
             if(!RequestValues.sendParameters(connection, this.parameters)){
                 return null;
             }
-            return RequestValues.createJSONObject(RequestValues.getResponse(connection));
+
+            String s = RequestValues.getResponse(connection);
+            if(s == null) return null;
+            return RequestValues.createJSONObject(s);
     }
 
     @Override

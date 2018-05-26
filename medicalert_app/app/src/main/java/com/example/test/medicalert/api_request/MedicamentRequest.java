@@ -1,5 +1,7 @@
 package com.example.test.medicalert.api_request;
 
+import android.util.Log;
+
 import com.example.test.medicalert.Medicament;
 
 import org.json.JSONArray;
@@ -7,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -32,6 +35,29 @@ public final class MedicamentRequest {
         }
 
         return medicament;
+    }
+
+    public static ArrayList<Medicament> getMedicamentByFormePharma(String formePharma){
+        JSONArray jsonArray;
+        GetRequestJSONArray request = new GetRequestJSONArray();
+        try {
+            jsonArray = request.execute(MEDICAMENT_URL + "/" + Medicament.formePharmaKey+ "/" + URLEncoder.encode(formePharma, "UTF-8")).get();
+        } catch(Exception e) {e.printStackTrace(); return null;}
+
+        if(jsonArray == null) return null;
+
+        ArrayList<Medicament> medicaments = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                medicaments.add(getMedicamentFromJSONObject(jsonArray.getJSONObject(i)));
+            }
+            catch(JSONException e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return medicaments;
     }
 
     public static Medicament getMedicamentByCip13(String wantedCip13){
@@ -95,7 +121,7 @@ public final class MedicamentRequest {
             e.printStackTrace();
             return false;
         }
-        return (requestCode == HttpURLConnection.HTTP_CREATED)?true:false;
+        return requestCode == HttpURLConnection.HTTP_CREATED;
     }
 
     public static boolean deleteMedicament (String cip13){
@@ -111,7 +137,7 @@ public final class MedicamentRequest {
             e.printStackTrace();
             return false;
         }
-        return (requestCode == HttpURLConnection.HTTP_OK)?true:false;
+        return requestCode == HttpURLConnection.HTTP_OK;
     }
 
     public static boolean modifyMedicament (String cip13, HashMap<String, String> params){
@@ -127,6 +153,6 @@ public final class MedicamentRequest {
             e.printStackTrace();
             return false;
         }
-        return (requestCode == HttpURLConnection.HTTP_OK)?true:false;
+        return requestCode == HttpURLConnection.HTTP_OK;
     }
 }

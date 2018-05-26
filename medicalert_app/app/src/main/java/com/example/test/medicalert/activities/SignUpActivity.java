@@ -6,18 +6,27 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.test.medicalert.api_request.AideSoignantRequest;
 import com.example.test.medicalert.utils.DateValidator;
 import com.example.test.medicalert.utils.EditTextToolbox;
 import com.example.test.medicalert.Patient;
 import com.example.test.medicalert.R;
 import com.example.test.medicalert.api_request.PatientRequest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class SignUpActivity extends Activity {
     private EditText emailEditText, passwordEditText, confirmPasswordEditText, prenewNomEditText, newNomEditText, dateNaissanceEditText;
+    private Spinner aideSoignantSpinner;
+    private ArrayList<HashMap<String, String>> aideSoignants;
     private Context activityContext;
     private View activityView;
 
@@ -31,8 +40,8 @@ public class SignUpActivity extends Activity {
         prenewNomEditText = (EditText) findViewById(R.id.prenom_box);
         newNomEditText = (EditText) findViewById(R.id.nom_box);
         dateNaissanceEditText = (EditText) findViewById(R.id.date_naissance_box);
-
         dateNaissanceEditText.setHint("ex : 04/05/1986");
+        aideSoignantSpinner = (Spinner) findViewById(R.id.aide_soignant_spinner);
 
         /*SharedPreferences p = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
         emailEditText.setText(""+p.getInt(getString(R.string.userId), 25));
@@ -74,20 +83,65 @@ public class SignUpActivity extends Activity {
                     return;
                 }
 
-                if (PatientRequest.insertPatient(new Patient(email.trim(), password.trim(), prenom.trim(), nom.trim(), dateNaissance.trim()))) {
-                    Toast.makeText(SignUpActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(activityContext, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(SignUpActivity.this, "Désolé, nous n'avons pas pu vous ajouter.", Toast.LENGTH_SHORT).show();
-                }
+                Object selectedItem = aideSoignantSpinner.getSelectedItem();
+                if(selectedItem == null){
+                    if(aideSoignants != null){
+                        if(aideSoignants.size() == 0){
+                            Toast.makeText(SignUpActivity.this, "Pas d'aide-soignants disponibles", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Selectionnez un aide-soignant", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Le service est indisponible", Toast.LENGTH_SHORT).show();
+                    }
 
+                } else {
+                    int position = aideSoignantSpinner.getSelectedItemPosition();
+                    HashMap<String, String> aideSoignant = aideSoignants.get(position);
+                    String idAideSoignant = aideSoignant.get("id");
+                    if (PatientRequest.insertPatient(new Patient(email.trim(), password.trim(), prenom.trim(), nom.trim(), dateNaissance.trim(), Integer.parseInt(idAideSoignant)))) {
+                        Toast.makeText(SignUpActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(activityContext, LoginActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Désolé, nous n'avons pas pu vous ajouter.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
+        aideSoignants = AideSoignantRequest.getAllAideSoignantByFullName();
+        if(aideSoignants == null){
+            Toast.makeText(SignUpActivity.this, "Le service est indisponible", Toast.LENGTH_SHORT).show();
+            aideSoignantSpinner.setEnabled(false);
+            aideSoignantSpinner.setClickable(false);
+            aideSoignantSpinner.setAdapter(new ArrayAdapter<String>(
+                            SignUpActivity.this,
+                            android.R.layout.simple_spinner_item,
+                            new ArrayList<String>()
+            ));
+        } else {
+            ArrayList<String> nomCompletAideSoignants = new ArrayList<>();
+            for(HashMap<String, String> aideSoignant : aideSoignants){
+                String nomComplet = "";
+                nomComplet += aideSoignant.get("prenom") + " ";
+                nomComplet += aideSoignant.get("nom");
+                nomCompletAideSoignants.add(nomComplet);
+            }
+
+            ArrayAdapter aideSoignantAdapter = new ArrayAdapter<String>(
+                SignUpActivity.this,
+                android.R.layout.simple_spinner_item,
+                nomCompletAideSoignants
+            );
+
+            aideSoignantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            aideSoignantSpinner.setAdapter(aideSoignantAdapter);
+        }
     }
 
     private boolean isComfirmPasswordCorrect(String password, String confirmPassword) {
         return password.equals(confirmPassword);
     }
+
 }
