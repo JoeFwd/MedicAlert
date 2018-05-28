@@ -12,6 +12,7 @@ const tables = {
 };
 exports.tables = tables;
 
+
 const createTables = [
         'CREATE TABLE IF NOT EXISTS ' + tables.medicamentCategorie.nom + '('
         + tables.medicamentCategorie.attr[0] + ' VARCHAR(64) PRIMARY KEY'
@@ -77,7 +78,7 @@ const createTables = [
         + 'id INT AUTO_INCREMENT PRIMARY KEY,'
         + tables.rendezVous.attr[0] + ' INT NOT NULL,'
         + tables.rendezVous.attr[1] + ' INT NOT NULL,'
-        + tables.rendezVous.attr[2] + ' DATETIME NOT NULL,'
+        + tables.rendezVous.attr[2] + ' VARCHAR(32) NOT NULL,'
         + 'FOREIGN KEY(' + tables.rendezVous.attr[0] + ') REFERENCES ' + tables.patients.nom + '(id),'
         + 'FOREIGN KEY(' + tables.rendezVous.attr[1] + ') REFERENCES ' + tables.aideSoignants.nom + '(id) ON DELETE CASCADE'
         + ')'

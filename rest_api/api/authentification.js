@@ -119,7 +119,6 @@ function checkExistenceOfAideSoignantEmail(req, res, next){
 				succes: false
 			});
 		}
-		console.log("Hey");
 		next();
 	});
 }

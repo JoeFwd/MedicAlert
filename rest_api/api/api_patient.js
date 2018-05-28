@@ -61,6 +61,7 @@ patientRouter.post('/', auth.ensureToken, responseForDuplicateEmails, function(r
                     req.body[attr[4]],
                     req.body[attr[5]]
                 ];
+
                 connection.query(sql, data, function(error, response){
                     if(error){
                         console.error(error);
@@ -119,6 +120,27 @@ patientRouter.patch('/:email', auth.ensureToken, responseForDuplicateEmails, fun
                         succes: true
                     });
                 });
+            });
+    //}});
+});
+
+patientRouter.get('/id_aide_soignant/:id_aide_soignant', auth.ensureToken, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            var sql = 'SELECT id, prenom, nom FROM ' + tables.tables.patients.nom + ' WHERE id_aide_soignant = ?;';
+            connection.query(sql, [req.params.id_aide_soignant], function(err, response){
+                if(err){
+                    console.error(err);
+                    res.statusCode = 500;
+                    return res.json({
+                        errors: ['La requête a échoué'],
+                        succes: false
+                    });
+                }
+                res.statusCode = 200;
+                res.json(response);
             });
     //}});
 });

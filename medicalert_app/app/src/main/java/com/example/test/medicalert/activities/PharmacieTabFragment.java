@@ -19,7 +19,7 @@ public class PharmacieTabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab_pharmacie, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_list, container, false);
 
         String[] menuItems = {
                 "Recherche de médicaments", "Ajouter un médicament", "Modifier  un médicament", "Supprimer  un médicament"

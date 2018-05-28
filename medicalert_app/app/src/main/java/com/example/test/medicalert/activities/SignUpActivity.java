@@ -77,7 +77,7 @@ public class SignUpActivity extends Activity {
                     EditTextToolbox.setEditTextToBlank(confirmPasswordEditText);
                     return;
                 }
-                if (!DateValidator.isDateValid(dateNaissance, "dd/MM/yyyy")) {
+                if (!DateValidator.isDateValid(dateNaissance, DateValidator.inputFormat)) {
                     Toast.makeText(SignUpActivity.this, "Votre date de naissance n'est pas valide", Toast.LENGTH_SHORT).show();
                     EditTextToolbox.setEditTextToBlank(dateNaissanceEditText);
                     return;

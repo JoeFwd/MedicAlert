@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.test.medicalert.AideSoignant;
-import com.example.test.medicalert.Medicament;
-import com.example.test.medicalert.Patient;
 import com.example.test.medicalert.api_request.AuthorisationRequest;
 import com.example.test.medicalert.utils.EditTextToolbox;
 import com.example.test.medicalert.R;
@@ -61,12 +57,14 @@ public class LoginActivity extends Activity{
                     storeUserInformation(auth);
                     Intent intent = new Intent(activityContext, AideSoignantMenuActivity.class);
                     startActivity(intent);
+                    clearEditTexts();
                 } else {
                     auth = AuthorisationRequest.loginAsPatient(email.trim(), password.trim());
                     if (auth != null) {
                         storeUserInformation(auth);
                         Intent intent = new Intent(activityContext, PatientMenuActivity.class);
                         startActivity(intent);
+                        clearEditTexts();
                     } else {
                         Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
                         EditTextToolbox.setEditTextToBlank(emailEditText);
@@ -82,6 +80,7 @@ public class LoginActivity extends Activity{
             public void onClick(View v) {
                 Intent intent = new Intent(activityContext, SignUpActivity.class);
                 startActivity(intent);
+                clearEditTexts();
             }
 
         });
@@ -105,6 +104,11 @@ public class LoginActivity extends Activity{
         editor.putInt(getString(R.string.userId), id);
         editor.putString(getString(R.string.tokenKey), token);
         editor.apply();
+    }
+
+    private void clearEditTexts(){
+        EditTextToolbox.setEditTextToBlank(emailEditText);
+        EditTextToolbox.setEditTextToBlank(passwordEditText);
     }
 
 }

@@ -9,12 +9,16 @@ import android.widget.TextView;
 import com.example.test.medicalert.Medicament;
 import com.example.test.medicalert.Patient;
 import com.example.test.medicalert.R;
+import com.example.test.medicalert.RendezVous;
+import com.example.test.medicalert.Traitement;
 import com.example.test.medicalert.api_request.AideSoignantRequest;
 import com.example.test.medicalert.api_request.AuthorisationRequest;
 import com.example.test.medicalert.api_request.CategorieRequest;
 import com.example.test.medicalert.api_request.MedicamentRequest;
 import com.example.test.medicalert.api_request.PatientRequest;
 import com.example.test.medicalert.api_request.PostRequestWithResponse;
+import com.example.test.medicalert.api_request.RendezVousRequest;
+import com.example.test.medicalert.api_request.TraitementRequest;
 
 import org.json.JSONObject;
 
@@ -62,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         }*/
         /*PatientRequest.insertPatient(new Patient("jforward@live.fr", "stratego2010", "Joël","Forward", "03/04/1996"));
         Log.v("token", AuthorisationRequest.login("jforward@live.fr", "stratego2010"));*/
-        Log.v("Login patient", AuthorisationRequest.loginAsPatient("a@bb", "123456") + "");
-        Log.v("Login aide-soignant", AuthorisationRequest.loginAsAideSoignant("c@dd", "123456") + "");
+        //Log.v("Login aide-soignant", MedicamentRequest.getMedicamentIdByCip13("3400936025677") + "");
+        //Log.v("Login aide-soignant", MedicamentRequest.getMedicamentIdByCip13("3400936025699") + "");
+        Log.v("Login aide-soignant", TraitementRequest.getAllTraitementByPatientId(4) + "");
     }
 }

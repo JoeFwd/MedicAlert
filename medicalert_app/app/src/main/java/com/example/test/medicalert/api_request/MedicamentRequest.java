@@ -3,6 +3,7 @@ package com.example.test.medicalert.api_request;
 import android.util.Log;
 
 import com.example.test.medicalert.Medicament;
+import com.example.test.medicalert.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +66,35 @@ public final class MedicamentRequest {
         GetRequestJSONObject request = new GetRequestJSONObject();
         try {
             jsonObj = request.execute(MEDICAMENT_URL + "/" + Medicament.cip13Key + "/" + wantedCip13).get();
+        } catch(Exception e) {e.printStackTrace(); return null;}
+
+        if(jsonObj == null) return null;
+
+        return getMedicamentFromJSONObject(jsonObj);
+    }
+
+    public static int getMedicamentIdByCip13(String wantedCip13){
+        JSONObject jsonObj;
+        GetRequestJSONObject request = new GetRequestJSONObject();
+        try {
+            jsonObj = request.execute(MEDICAMENT_URL + "/get_id/" + wantedCip13).get();
+        } catch(Exception e) {e.printStackTrace(); return -1;}
+
+        if(jsonObj == null) return -1;
+
+        try {
+            return jsonObj.getInt("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public static Medicament getMedicamentById(int id){
+        JSONObject jsonObj;
+        GetRequestJSONObject request = new GetRequestJSONObject();
+        try {
+            jsonObj = request.execute(MEDICAMENT_URL + "/id/" + id).get();
         } catch(Exception e) {e.printStackTrace(); return null;}
 
         if(jsonObj == null) return null;

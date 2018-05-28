@@ -22,4 +22,16 @@
     <string name="userId">userId</string>
     <string name="aide_soignant">Aide-soignant</string>
     <string name="idKey">id</string>
+    <string name="patient">Patient : </string>
+    <string name="oui">Oui</string>
+    <string name="non">Non</string>
+    <string name="matin">Prise le matin :</string>
+    <string name="apres_midi">Prise l\'après-midi :</string>
+    <string name="soir">Prise le soir :</string>
+    <string name="ajout_medicament">Ajouter les médicaments</string>
+    <string name="dosage">dosage</string>
+    <string name="date_peremption">date de péremption</string>
+    <string name="finir_traitement">Finir le traitement</string>
+    <string name="date_rdv">Date de rendez-vous</string>
+    <string name="date_rdv_hint">Entrez une date, ex : 31/05/2018</string>
 </resources>

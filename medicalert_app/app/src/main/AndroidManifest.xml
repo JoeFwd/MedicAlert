@@ -3,7 +3,7 @@
     package="com.example.test.medicalert">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +21,7 @@
         <activity
             android:name="com.example.test.medicalert.activities.AideSoignantMenuActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <activity android:name="com.example.test.medicalert.activities.AjouterMedicamentActivity"/>
         <activity android:name="com.example.test.medicalert.activities.ModifierMedicamentActivity"/>
@@ -35,7 +36,15 @@
         <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentActivity"/>
         <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentParNomActivity"/>
         <activity android:name="com.example.test.medicalert.activities.RechercheMedicamentParCategorieActivity"/>
-
+        <activity android:name="com.example.test.medicalert.activities.AjouterTraitementActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.ModifierTraitementActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.SupprimerTraitementActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.AjouterMedicamentTraitementMenuActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.AjouterMedicamentDansTraitementActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.barcode_scanner.ScanCodeActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.AjouterRendezVousActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.ListerRendezVousAideSoignantActivity"/>
+        <activity android:name="com.example.test.medicalert.activities.ListerMedicamentTraitementActivity"/>
     </application>
 
 </manifest>

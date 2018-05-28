@@ -208,6 +208,29 @@ medicamentRouter.get('/formePharma/:formePharma', auth.ensureToken, function(req
             });
 	//}});
 });
+
+/*Should remove this and allow the id to be sent to all other get medicament requests*/
+medicamentRouter.get('/get_id/:cip13', auth.ensureToken, checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
+	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
+        if(err){
+            res.sendStatus(403);
+        } else {*/
+            var sql =  "SELECT id FROM " + tables.tables.medicaments.nom +" WHERE cip13 = ?;"
+            connection.query(sql, [req.params.cip13], function(err, result){
+                if(err){
+                    console.error(err);
+                    res.statusCode = 500;
+                    return res.json({
+                        errors: ['Le médicament est introuvable'],
+                        id : -1
+                    });
+                }
+                res.statusCode = 200;
+                return res.json(result[0]);
+            });
+	//}});
+});
+
 medicamentRouter.get('/cip13/:cip13', auth.ensureToken, checkCip13Validity, checkExistenceOfMedicamentWithCipAsParam, function(req, res) {
 	/*jwt.verify(req.token, config.secret, function(err, jwtdata){
         if(err){
@@ -217,6 +240,19 @@ medicamentRouter.get('/cip13/:cip13', auth.ensureToken, checkCip13Validity, chec
             res.json(utils.removeIdAttribute(req.medicament[0]));
 	//}});
 });
+
+medicamentRouter.get('/id/:id', auth.ensureToken, function(req, res, next){
+        checkExistenceofMedicament(sql = 'SELECT * FROM ' + tables.tables.medicaments.nom +' WHERE id = ?;', [req.params.id], req, res, next);
+    }, function(req, res) {
+        /*jwt.verify(req.token, config.secret, function(err, jwtdata){
+            if(err){
+                res.sendStatus(403);
+            } else {*/
+                res.statusCode = 200;
+                res.json(req.medicament[0]);
+        //}});
+});
+
 medicamentRouter.get('/nom/:nom/:limit?', auth.ensureToken, findMedicamentContainingNom, function(req, res) {
 	/*jwt.verify(req.token, config.secret, function(err, data){
         if(err){

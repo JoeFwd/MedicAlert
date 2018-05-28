@@ -24,6 +24,10 @@ var categorie = require('./api/api_categorie');
 var categorieRouter = categorie.router;
 var aideSoignant = require('./api/api_aide_soignant');
 var aideSoignantRouter = aideSoignant.router;
+var traitement = require('./api/api_traitement');
+var traitementRouter = traitement.router;
+var rendezVous = require('./api/api_rendez_vous');
+var rendezVousRouter = rendezVous.router;
 
 
 var errHandler = function(err) {
@@ -40,7 +44,7 @@ createTablePromise.then(function(resolve, reject){
     return stringQueries;
 }, errHandler)
 .then(function(stringQueries){
-    if(stringQueries == null) console.log("Couldn't retrieve inserts queries");
+    if(stringQueries == null) console.error("Couldn't retrieve inserts queries");
     var queries = stringQueries.split('\n');
     for(var i=0; i<queries.length; i++){
         connection.query(queries[i], [], function(err, response){
@@ -57,6 +61,8 @@ app.use('/patients', patientRouter);
 app.use('', authRouter);
 app.use('/categorie', categorieRouter);
 app.use('/aide_soignants', aideSoignantRouter);
+app.use('/traitements', traitementRouter);
+app.use('/rendez_vous', rendezVousRouter);
 
 var server = app.listen(port, function() {
 	console.log('Listening on port ' + port);

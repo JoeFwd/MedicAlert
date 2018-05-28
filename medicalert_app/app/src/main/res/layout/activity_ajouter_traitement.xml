@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/ajouter_traitement_wrapper"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="@string/app_name" />
+
+    <EditText
+        android:id="@+id/nom_traitement"
+        android:hint="nom du traitement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true" />
+    <EditText
+        android:id="@+id/date_debut_traitement"
+        android:hint="date de début du traitement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nom_traitement"
+        android:inputType="date"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true" />
+    <EditText
+        android:id="@+id/duree_traitement"
+        android:hint="nombre de jours du traitement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date_debut_traitement"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true" />
+
+    <LinearLayout
+        android:id="@+id/checkboxes"
+        android:layout_below="@id/duree_traitement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="4dp"
+        android:gravity="left">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/text_matin"
+        android:height="32dp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:text="@string/matin"
+        />
+
+    <TextView
+        android:id="@+id/text_apres_midi"
+        android:height="32dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/text_matin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:text="@string/apres_midi"
+        />
+
+    <TextView
+        android:id="@+id/text_soir"
+        android:height="32dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/text_apres_midi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:text="@string/soir"
+        />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/matin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <CheckBox
+            android:id="@+id/oui_matin"
+            android:height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/oui"
+        />
+        <CheckBox
+            android:id="@+id/non_matin"
+            android:height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/non"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/apres_midi"
+        android:layout_below="@id/matin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <CheckBox
+            android:id="@+id/oui_apres_midi"
+            android:height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/oui"
+            />
+        <CheckBox
+            android:id="@+id/non_apres_midi"
+            android:height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/non"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/soir"
+        android:layout_below="@id/apres_midi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <CheckBox
+            android:id="@+id/oui_soir"
+            android:height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/oui"
+            />
+        <CheckBox
+            android:id="@+id/non_soir"
+            android:height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/non"
+            />
+
+    </LinearLayout>
+    </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/patient"
+        android:layout_below="@id/checkboxes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/patient_mess"
+            android:layout_below="@id/toolbar"
+            android:gravity="center_vertical"
+            android:labelFor="@+id/patient_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:paddingStart="4dp"
+            android:text="@string/patient" />
+
+        <Spinner
+            android:id="@+id/patient_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/ajouter_button"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/patient"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:text="@string/ajout_medicament"
+        android:textColor="@color/colorWhiteSmoke" />
+    
+</RelativeLayout>

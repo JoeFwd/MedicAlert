@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ajouter_rendez_vous_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="@string/app_name" />
+
+    <EditText
+        android:id="@+id/date_rendez_vous_box"
+        android:layout_below="@id/toolbar"
+        android:inputType="date"
+        android:hint="@string/date_rdv_hint"
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/heure_rdv"
+        android:layout_below="@id/date_rendez_vous_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:baselineAligned="false">
+        <LinearLayout
+            android:id="@+id/heure"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp">
+            <TextView
+                android:id="@+id/heure_mess"
+                android:labelFor="@+id/heure_spinner_box"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:text="Heure : "
+                android:layout_width="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/heure_spinner_box"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/minute"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/minute_mess"
+                android:labelFor="@+id/minute_spinner_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:text="Minute : " />
+
+            <Spinner
+                android:id="@+id/minute_spinner_box"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/patient"
+        android:layout_below="@id/heure_rdv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp">
+        <TextView
+            android:id="@+id/patient_mess"
+            android:labelFor="@+id/patient_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:text="@string/patient" />
+
+        <Spinner
+            android:id="@+id/patient_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_below="@id/patient"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/ajouter"
+        android:textColor="@color/colorWhiteSmoke" />
+
+</RelativeLayout>

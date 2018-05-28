@@ -12695,7 +12695,6 @@
 66206474	5501667	1 flacon + 1 seringue préremplie (5 mL) + 1 adaptateur pour flacon + 1 nécessaire de ponction veineuse	Présentation active	Déclaration de commercialisation	05/04/2017	3400955016670	oui					
 66207341	5605446	10 flacon(s) en verre de 20 ml	Présentation active	Déclaration de commercialisation	09/07/2015	3400956054466	oui					
 66207551	3584088	plaquette(s) thermoformée(s) PVC-aluminium de 30 comprimé(s)	Présentation active	Déclaration d'arrêt de commercialisation	14/11/2013	3400935840882	non	65%	2,91	3,93	1,02	
-66209709	3356387	plaquette(s) thermoformée(s) PVC-aluminium de 30 gélule(s)	Présentation active	Déclaration d'arrêt de commercialisation	27/05/2013	3400933563875	non					
 66209851	5661930	10 flacon(s) en verre	Présentation active	Déclaration de commercialisation	13/05/2005	3400956619306	oui					
 66210572	5625495	1 bouteille acier de 2 l	Présentation active	Déclaration de commercialisation	01/07/2002	3400956254958	non					
 66210572	5625503	1 bouteille acier de 5 l	Présentation active	Déclaration de commercialisation	20/06/2002	3400956255030	oui					
@@ -18160,7 +18159,6 @@
 68867734	3471421	1 flacon(s) en verre de 4 ml	Présentation active	Déclaration d'arrêt de commercialisation	31/08/2016	3400934714214	non					
 68868512	3269518	1 ampoule(s) en verre de 2 ml	Présentation active	Déclaration de commercialisation	20/11/2012	3400932695188	oui	65%	11,66	12,68	1,02	
 68868512	3512054	10 ampoule(s) en verre de 2 ml	Présentation active	Déclaration de commercialisation	01/01/2000	3400935120540	oui					
-68868590	3556548	6 poche(s) de 1000 ml à 3 compartiments en copolymère polyoléfinique, EVA : éthylène vinyl acétate et copolyester suremballée(s)/surpochée(s)	Présentation active	Déclaration d'arrêt de commercialisation	27/05/2013	3400935565488	non					
 68868590	3556554	4 poche(s) de 1500 ml à 3 compartiments en copolymère polyoléfinique, EVA : éthylène vinyl acétate et copolyester suremballée(s)/surpochée(s)	Présentation active	Déclaration d'arrêt de commercialisation	18/12/2013	3400935565549	non					
 68868590	3556560	4 poche(s) de 2000 ml à 3 compartiments en copolymère polyoléfinique, EVA : éthylène vinyl acétate et copolyester suremballée(s)/surpochée(s)	Présentation active	Déclaration d'arrêt de commercialisation	13/08/2013	3400935565600	non					
 68869105	3989388	8 sachet(s)-dose(s) papier aluminium polyéthylène	Présentation active	Déclaration d'arrêt de commercialisation	16/10/2014	3400939893884	non	65%	1,16	2,18	1,02	

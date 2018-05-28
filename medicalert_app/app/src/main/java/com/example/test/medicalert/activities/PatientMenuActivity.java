@@ -25,7 +25,7 @@ public class PatientMenuActivity extends AppCompatActivity{
     private void setupViewPager(ViewPager viewPager){
         SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new TraitementPatientTabFragment(), getString(R.string.tab_patient_1));
-        adapter.addFragment(new RendezVousAideSoignantTabFragment(), getString(R.string.tab_patient_2));
+        adapter.addFragment(new RendezVousPatientTabFragment(), getString(R.string.tab_patient_2));
         viewPager.setAdapter(adapter);
     }
 }

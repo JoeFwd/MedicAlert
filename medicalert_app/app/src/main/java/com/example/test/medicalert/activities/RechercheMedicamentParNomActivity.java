@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,8 +65,10 @@ public class RechercheMedicamentParNomActivity extends AppCompatActivity {
                     adapter.addAll(medicaments);
                     adapter.notifyDataSetChanged();
                 } else {
-                    if(!newText.equals(""))
+                    if(!newText.equals("")) {
+                        Log.v("rechr", newText);
                         rechercheMessage.setText("\n\nPas de médicaments");
+                    }
                     else
                         rechercheMessage.setText("\n\nDonnez un nom dans la barre de recherche");
                     adapter.clear();
