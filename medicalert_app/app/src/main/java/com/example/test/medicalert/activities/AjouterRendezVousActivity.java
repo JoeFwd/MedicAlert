@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.example.test.medicalert.R;
 import com.example.test.medicalert.RendezVous;
+import com.example.test.medicalert.api_request.FirebaseRequest;
 import com.example.test.medicalert.api_request.PatientRequest;
+import com.example.test.medicalert.api_request.PostRequest;
 import com.example.test.medicalert.api_request.RendezVousRequest;
 import com.example.test.medicalert.utils.DateValidator;
 import com.example.test.medicalert.utils.EditTextToolbox;
@@ -27,6 +29,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class AjouterRendezVousActivity extends Activity {
+    private final String TAG = "AjouterRendezVousActivi";
     private Spinner patientSpinner, heureSpinner, minuteSpinner;
     private EditText dateRendezVousEditText;
     private View activityView;
@@ -97,6 +100,14 @@ public class AjouterRendezVousActivity extends Activity {
 
                     if (RendezVousRequest.insertRendezVous(new RendezVous(patientId, userId, dateRendezVousCalendar))) {
                         Toast.makeText(activityContext, "Le rendez-vous a été ajouté", Toast.LENGTH_SHORT).show();
+
+                        String firebaseToken = FirebaseRequest.getPatientToken(patientId);
+                        if(firebaseToken != null){
+                            if(!FirebaseRequest.sendNofiticationViaFCM (firebaseToken, "MedicAlert", "Vous avez un nouveau rendez-vous.")){
+                                Log.v(TAG, "Notifier le patient a échoué");
+                            }
+                        }
+
                         Intent intent = new Intent(activityContext, AideSoignantMenuActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -110,7 +121,7 @@ public class AjouterRendezVousActivity extends Activity {
 
         if(userId == default_id){
             SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
-            Log.e("ERROR", "USER ID WAS NOT INITIALISED");
+            Log.e(TAG, "UserId WAS NOT INITIALISED");
         } else {
             patients = PatientRequest.getAllPatientByAideSoignantId(userId);
             if(patients == null){
@@ -143,7 +154,7 @@ public class AjouterRendezVousActivity extends Activity {
 
     private void initialiseSpinnerWithIntegers(Spinner spinner, int firstValue, int finalValue){
         if(firstValue > finalValue){
-            Log.e("Error", "firstValue must be equal or greater than the finalValue");
+            Log.e(TAG, "firstValue must be equal or greater than the finalValue");
             return;
         }
 

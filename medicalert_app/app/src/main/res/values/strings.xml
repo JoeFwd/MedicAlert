@@ -34,4 +34,6 @@
     <string name="finir_traitement">Finir le traitement</string>
     <string name="date_rdv">Date de rendez-vous</string>
     <string name="date_rdv_hint">Entrez une date, ex : 31/05/2018</string>
+    <string name="channel_name">medicAlertNotification</string>
+    <string name="channel_description">Channel for MedicAlert notifications</string>
 </resources>

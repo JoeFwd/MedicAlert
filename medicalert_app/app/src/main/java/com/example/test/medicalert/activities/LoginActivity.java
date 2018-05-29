@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,14 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.test.medicalert.api_request.AuthorisationRequest;
+import com.example.test.medicalert.api_request.FirebaseRequest;
 import com.example.test.medicalert.utils.EditTextToolbox;
 import com.example.test.medicalert.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends Activity{
-
+    private final String TAG = "LoginActivity";
     private EditText emailEditText, passwordEditText;
     private View activityView;
     private Context activityContext;
@@ -65,6 +68,17 @@ public class LoginActivity extends Activity{
                         Intent intent = new Intent(activityContext, PatientMenuActivity.class);
                         startActivity(intent);
                         clearEditTexts();
+
+                        try {
+                            int patientid = auth.getInt(getString(R.string.idKey));
+                            String firebaseToken = FirebaseInstanceId.getInstance().getToken();
+                            if(!FirebaseRequest.insertToken(firebaseToken, patientid)){
+                                Log.v(TAG, "Coudn't insert firebase token");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     } else {
                         Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
                         EditTextToolbox.setEditTextToBlank(emailEditText);

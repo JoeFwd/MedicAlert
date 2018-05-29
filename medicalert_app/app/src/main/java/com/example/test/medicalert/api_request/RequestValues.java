@@ -70,7 +70,6 @@ public final class RequestValues {
             HttpURLConnection connection = createConnection(stringUrl, REQUEST_GET);
             connection.setReadTimeout(READ_TIMEOUT);
             connection.connect();
-            Log.v("s", connection.getResponseCode() + "");
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 result = getResponse(connection);
             } else {

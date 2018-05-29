@@ -22,7 +22,6 @@ import java.util.HashMap;
 public class ListerRendezVousAideSoignantActivity extends Activity{
     private TextView emptyListMessage;
     private String noRendezVousMessage = "\n\nVous n'avez pas de rendez-vous";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +53,16 @@ public class ListerRendezVousAideSoignantActivity extends Activity{
                     e.printStackTrace();
                     continue; //Ignorer le rendez vous dont la date est mal formaté
                 }
-                if(displayedRdv.size() == 0) {
-                    emptyListMessage.setText(noRendezVousMessage);
-                } else {
-                    ArrayAdapter<String>adapter = new ArrayAdapter<>(
-                            ListerRendezVousAideSoignantActivity.this,
-                            android.R.layout.simple_list_item_1,
-                            displayedRdv
-                    );
-                    rendezVousListView.setAdapter(adapter);
-                }
+            }
+            if(displayedRdv.size() == 0) {
+                emptyListMessage.setText(noRendezVousMessage);
+            } else {
+                ArrayAdapter<String>adapter = new ArrayAdapter<>(
+                        ListerRendezVousAideSoignantActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        displayedRdv
+                );
+                rendezVousListView.setAdapter(adapter);
             }
         }
     }

@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "1035028674762",
+    "firebase_url": "https://medicalert-ea522.firebaseio.com",
+    "project_id": "medicalert-ea522",
+    "storage_bucket": "medicalert-ea522.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035028674762:android:0e49e2c17dfae318",
+        "android_client_info": {
+          "package_name": "com.example.test.medicalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035028674762-n7hevfm7h4vqc5k30220iumi4qk3p3o1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.test.medicalert",
+            "certificate_hash": "428f6b8e836fd2ca80af1bd2e857d4ef935297fe"
+          }
+        },
+        {
+          "client_id": "1035028674762-it874d0ikm53e0pe6nfp55i1fva0hcsc.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1035028674762-it874d0ikm53e0pe6nfp55i1fva0hcsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrt0e6c5MUkTJuiOHKMaM0sqW9gjX-lOQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1035028674762-it874d0ikm53e0pe6nfp55i1fva0hcsc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

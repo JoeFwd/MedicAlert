@@ -1,28 +1,11 @@
 package com.example.test.medicalert.activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.example.test.medicalert.Medicament;
-import com.example.test.medicalert.Patient;
 import com.example.test.medicalert.R;
-import com.example.test.medicalert.RendezVous;
-import com.example.test.medicalert.Traitement;
-import com.example.test.medicalert.api_request.AideSoignantRequest;
-import com.example.test.medicalert.api_request.AuthorisationRequest;
-import com.example.test.medicalert.api_request.CategorieRequest;
-import com.example.test.medicalert.api_request.MedicamentRequest;
-import com.example.test.medicalert.api_request.PatientRequest;
-import com.example.test.medicalert.api_request.PostRequestWithResponse;
-import com.example.test.medicalert.api_request.RendezVousRequest;
-import com.example.test.medicalert.api_request.TraitementRequest;
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
+import com.example.test.medicalert.api_request.FirebaseRequest;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -68,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         Log.v("token", AuthorisationRequest.login("jforward@live.fr", "stratego2010"));*/
         //Log.v("Login aide-soignant", MedicamentRequest.getMedicamentIdByCip13("3400936025677") + "");
         //Log.v("Login aide-soignant", MedicamentRequest.getMedicamentIdByCip13("3400936025699") + "");
-        Log.v("Login aide-soignant", TraitementRequest.getAllTraitementByPatientId(4) + "");
+        Log.v("Login aide-soignant", FirebaseRequest.getPatientToken(2) + "");
+        Log.v("Login aide-soignant", FirebaseRequest.insertToken("toookeeen", 1) + "");
+        Log.v("Login aide-soignant", FirebaseRequest.updateToken("uppdatedToken", 1) + "");
     }
 }
