@@ -28,6 +28,8 @@ var traitement = require('./api/api_traitement');
 var traitementRouter = traitement.router;
 var rendezVous = require('./api/api_rendez_vous');
 var rendezVousRouter = rendezVous.router;
+var firebase = require('./api/api_firebase');
+var firebaseRouter = firebase.router;
 
 
 var errHandler = function(err) {
@@ -63,6 +65,7 @@ app.use('/categorie', categorieRouter);
 app.use('/aide_soignants', aideSoignantRouter);
 app.use('/traitements', traitementRouter);
 app.use('/rendez_vous', rendezVousRouter);
+app.use('/firebase_tokens', firebaseRouter);
 
 var server = app.listen(port, function() {
 	console.log('Listening on port ' + port);

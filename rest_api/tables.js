@@ -8,7 +8,8 @@ const tables = {
     traitements : {nom : "Traitements", attr : ['id_patient', 'id_aide_soignant', 'nom', 'date_debut', 'duree_traitement', 'matin', 'apres_midi', 'soir']},
     traitementsMedicament : {nom : "Traitements_Medicament", attr : ['id_traitement', 'id_medicament', 'dosage', 'date_peremption']},
     rendezVous : {nom : "Rendez_Vous", attr : ['id_patient', 'id_aide_soignant', 'date_rdv']},
-    medicamentCategorie : {nom : "Medicament_Categorie", attr : ['categorie']}
+    medicamentCategorie : {nom : "Medicament_Categorie", attr : ['categorie']},
+    firebaseTokens : {nom : "Firebase_Tokens", attr : ['id_patient', 'token']}
 };
 exports.tables = tables;
 
@@ -81,6 +82,14 @@ const createTables = [
         + tables.rendezVous.attr[2] + ' VARCHAR(32) NOT NULL,'
         + 'FOREIGN KEY(' + tables.rendezVous.attr[0] + ') REFERENCES ' + tables.patients.nom + '(id),'
         + 'FOREIGN KEY(' + tables.rendezVous.attr[1] + ') REFERENCES ' + tables.aideSoignants.nom + '(id) ON DELETE CASCADE'
+        + ')',
+
+        'CREATE TABLE IF NOT EXISTS ' + tables.firebaseTokens.nom + '('
+        + 'id INT AUTO_INCREMENT PRIMARY KEY,'
+        + tables.firebaseTokens.attr[0] + ' INT NOT NULL,'
+        + tables.firebaseTokens.attr[1] + ' VARCHAR(255) NOT NULL,'
+        + ' CONSTRAINT UniqueEmail UNIQUE(' + tables.firebaseTokens.attr[0] +'),'
+        + 'FOREIGN KEY(' + tables.firebaseTokens.attr[0] + ') REFERENCES ' + tables.patients.nom + '(id) ON DELETE CASCADE'
         + ')'
 ];
 
