@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public final class SpinnerToolbox {
     private SpinnerToolbox(){}
 
-    public static void disablePatientSpinner(Spinner spinner, Context context){
+    public static void disableSpinner(Spinner spinner, Context context){
         spinner.setEnabled(false);
         spinner.setClickable(false);
         spinner.setAdapter(new ArrayAdapter<String>(

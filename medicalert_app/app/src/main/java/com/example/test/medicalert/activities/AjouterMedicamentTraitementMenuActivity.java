@@ -45,7 +45,6 @@ public class AjouterMedicamentTraitementMenuActivity extends Activity {
         recherches.add("Voir la liste");
         recherches.add("Ajouter un médicament dans la liste");
         recherches.add("Scanner un médicament");
-        recherches.add("Supprimer un médicament de la liste");
 
         listView = (ListView) findViewById(R.id.recherche_type);
         ajouterButton = (Button) findViewById(R.id.add_button);

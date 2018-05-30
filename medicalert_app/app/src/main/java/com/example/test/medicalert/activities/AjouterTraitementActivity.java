@@ -154,16 +154,16 @@ public class AjouterTraitementActivity extends Activity {
         });
 
         if(userId == default_id){
-            SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
+            SpinnerToolbox.disableSpinner(patientSpinner, activityContext);
             Log.e("ERROR", "USER ID WAS NOT INITIALISED");
         } else {
             patients = PatientRequest.getAllPatientByAideSoignantId(userId);
             if(patients == null){
                 Toast.makeText(AjouterTraitementActivity.this, "Le service est indisponible", Toast.LENGTH_SHORT).show();
-                SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
+                SpinnerToolbox.disableSpinner(patientSpinner, activityContext);
             } else if(patients.size() == 0) {
                 Toast.makeText(AjouterTraitementActivity.this, "Pas de patients disponibles", Toast.LENGTH_SHORT).show();
-                SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
+                SpinnerToolbox.disableSpinner(patientSpinner, activityContext);
             } else {
                 ArrayList<String> nomCompletPatients = new ArrayList<>();
                 for (HashMap<String, String> patient : patients) {

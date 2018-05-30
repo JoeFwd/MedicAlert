@@ -1,4 +1,4 @@
-package com.example.test.medicalert.firebase;
+package com.example.test.medicalert.notification;
 
 import android.content.SharedPreferences;
 import android.util.Log;

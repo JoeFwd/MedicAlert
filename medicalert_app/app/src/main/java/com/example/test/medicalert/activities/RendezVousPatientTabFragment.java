@@ -47,7 +47,6 @@ public class RendezVousPatientTabFragment extends Fragment {
         int default_id = -1, userId;
         SharedPreferences p = getActivity().getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
         userId = p.getInt(getString(R.string.userId), default_id);
-        Log.v("Prefs", userId + "");
 
         ArrayList<HashMap<String, String>> rendezVousList = RendezVousRequest.getAllRendezVousWithAideSoignantFullName(userId);
         if (rendezVousList == null) {

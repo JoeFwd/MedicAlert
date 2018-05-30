@@ -52,7 +52,6 @@ public class TraitementPatientTabFragment extends Fragment{
         int default_id = -1, userId;
         SharedPreferences p = getActivity().getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
         userId = p.getInt(getString(R.string.userId), default_id);
-        Log.v("Prefs", userId + "");
 
         traitementList = TraitementRequest.getAllTraitementByPatientId(userId);
         if (traitementList  == null) {

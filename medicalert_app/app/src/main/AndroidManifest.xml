@@ -12,8 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
-        </activity>
         <activity android:name="com.example.test.medicalert.activities.SignUpActivity"/>
         <activity
             android:name="com.example.test.medicalert.activities.PatientMenuActivity"
@@ -47,16 +45,17 @@
         <activity android:name="com.example.test.medicalert.activities.ListerRendezVousAideSoignantActivity"/>
         <activity android:name="com.example.test.medicalert.activities.ListerMedicamentTraitementActivity"/>
         <service
-            android:name="com.example.test.medicalert.firebase.FirebaseMessagingService">
+            android:name="com.example.test.medicalert.notification.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="com.example.test.medicalert.firebase.FirebaseInstanceIDService">
+        <service android:name="com.example.test.medicalert.notification.FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <receiver android:name=".notification.AlarmReceiver"/>
     </application>
 
 </manifest>

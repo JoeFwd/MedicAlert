@@ -73,7 +73,8 @@ public class LoginActivity extends Activity{
                             int patientid = auth.getInt(getString(R.string.idKey));
                             String firebaseToken = FirebaseInstanceId.getInstance().getToken();
                             if(!FirebaseRequest.insertToken(firebaseToken, patientid)){
-                                Log.v(TAG, "Coudn't insert firebase token");
+                                if(!FirebaseRequest.updateToken(firebaseToken, patientid))
+                                    Log.v(TAG, "Coudn't insert firebase token");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

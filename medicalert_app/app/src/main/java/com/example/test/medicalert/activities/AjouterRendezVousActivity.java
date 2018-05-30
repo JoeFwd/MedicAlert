@@ -120,16 +120,16 @@ public class AjouterRendezVousActivity extends Activity {
         });
 
         if(userId == default_id){
-            SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
+            SpinnerToolbox.disableSpinner(patientSpinner, activityContext);
             Log.e(TAG, "UserId WAS NOT INITIALISED");
         } else {
             patients = PatientRequest.getAllPatientByAideSoignantId(userId);
             if(patients == null){
                 Toast.makeText(activityContext, "Le service est indisponible", Toast.LENGTH_SHORT).show();
-                SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
+                SpinnerToolbox.disableSpinner(patientSpinner, activityContext);
             } else if(patients.size() == 0) {
                 Toast.makeText(activityContext, "Pas de patients disponibles", Toast.LENGTH_SHORT).show();
-                SpinnerToolbox.disablePatientSpinner(patientSpinner, activityContext);
+                SpinnerToolbox.disableSpinner(patientSpinner, activityContext);
             } else {
                 ArrayList<String> nomCompletPatients = new ArrayList<>();
                 for (HashMap<String, String> patient : patients) {

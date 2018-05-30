@@ -49,8 +49,7 @@ public class SupprimerMedicamentActivity extends Activity {
                     return;
                 } else {
                     Toast.makeText(activityContext, "Le médicament a été supprimé avec succès", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(activityContext, AideSoignantMenuActivity.class);
-                    startActivity(intent);
+                    finish();
                 }
             }
 

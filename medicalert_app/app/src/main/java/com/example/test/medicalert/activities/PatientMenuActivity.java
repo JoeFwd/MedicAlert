@@ -20,6 +20,35 @@ public class PatientMenuActivity extends AppCompatActivity{
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        /*AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+
+        Intent notificationIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 1, broadcast);*/
+
+
+        /*Log.v("Notif", "setting alramrs");
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);*/
+
     }
 
     private void setupViewPager(ViewPager viewPager){
@@ -28,4 +57,5 @@ public class PatientMenuActivity extends AppCompatActivity{
         adapter.addFragment(new RendezVousPatientTabFragment(), getString(R.string.tab_patient_2));
         viewPager.setAdapter(adapter);
     }
+
 }

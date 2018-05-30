@@ -84,7 +84,6 @@ public class TraitementRequest {
         } catch(Exception e) {e.printStackTrace(); return null;}
 
         if(response == null) return null;
-        Log.v("res", response +"");
         for (int i = 0; i < response.length(); i++) {
             try {
                 JSONObject t = response.getJSONObject(i);

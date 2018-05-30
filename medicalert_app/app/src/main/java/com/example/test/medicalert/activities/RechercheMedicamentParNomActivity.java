@@ -66,7 +66,6 @@ public class RechercheMedicamentParNomActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 } else {
                     if(!newText.equals("")) {
-                        Log.v("rechr", newText);
                         rechercheMessage.setText("\n\nPas de médicaments");
                     }
                     else
